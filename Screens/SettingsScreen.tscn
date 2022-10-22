@@ -1,0 +1,189 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Screens/SettingsScreen.gd" type="Script" id=1]
+[ext_resource path="res://Theme/Theme.tres" type="Theme" id=2]
+[ext_resource path="res://UI/Carousel.tscn" type="PackedScene" id=3]
+[ext_resource path="res://UI/HSliderWithLabel.tscn" type="PackedScene" id=4]
+
+[node name="SettingsScreen" type="Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 2560.0
+margin_bottom = 1440.0
+color = Color( 0.788235, 0.803922, 1, 1 )
+
+[node name="TabContainer" type="TabContainer" parent="."]
+margin_right = 2560.0
+margin_bottom = 1444.0
+
+[node name="General" type="PanelContainer" parent="TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 87.0
+margin_right = -4.0
+margin_bottom = -4.0
+rect_min_size = Vector2( 0, 1353 )
+
+[node name="ScrollContainer3" type="ScrollContainer" parent="TabContainer/General"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 2545.0
+margin_bottom = 1346.0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/General/ScrollContainer3"]
+margin_right = 2530.0
+margin_bottom = 109.0
+custom_constants/margin_top = 30
+
+[node name="CenterContainer" type="CenterContainer" parent="TabContainer/General/ScrollContainer3/MarginContainer"]
+margin_top = 30.0
+margin_right = 2530.0
+margin_bottom = 109.0
+rect_min_size = Vector2( 2530, 0 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/General/ScrollContainer3/MarginContainer/CenterContainer"]
+margin_left = 693.0
+margin_right = 1837.0
+margin_bottom = 79.0
+custom_constants/separation = 250
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/General/ScrollContainer3/MarginContainer/CenterContainer/HBoxContainer"]
+margin_right = 468.0
+margin_bottom = 79.0
+
+[node name="Label" type="Label" parent="TabContainer/General/ScrollContainer3/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer2"]
+margin_right = 468.0
+margin_bottom = 79.0
+text = "Window Mode"
+align = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/General/ScrollContainer3/MarginContainer/CenterContainer/HBoxContainer"]
+margin_left = 718.0
+margin_right = 1144.0
+margin_bottom = 79.0
+alignment = 2
+
+[node name="ScreenType" parent="TabContainer/General/ScrollContainer3/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+states = [ "Fullscreen", "Windowed", "Borderless" ]
+
+[node name="Video" type="PanelContainer" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 87.0
+margin_right = -4.0
+margin_bottom = -4.0
+rect_min_size = Vector2( 0, 1353 )
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="TabContainer/Video"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 2545.0
+margin_bottom = 1346.0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Video/ScrollContainer2"]
+margin_right = 2530.0
+margin_bottom = 109.0
+custom_constants/margin_top = 30
+
+[node name="CenterContainer" type="CenterContainer" parent="TabContainer/Video/ScrollContainer2/MarginContainer"]
+margin_top = 30.0
+margin_right = 2530.0
+margin_bottom = 109.0
+rect_min_size = Vector2( 2530, 0 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Video/ScrollContainer2/MarginContainer/CenterContainer"]
+margin_left = 693.0
+margin_right = 1837.0
+margin_bottom = 79.0
+custom_constants/separation = 250
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/Video/ScrollContainer2/MarginContainer/CenterContainer/HBoxContainer"]
+margin_right = 468.0
+margin_bottom = 79.0
+
+[node name="Label" type="Label" parent="TabContainer/Video/ScrollContainer2/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer2"]
+margin_right = 468.0
+margin_bottom = 79.0
+text = "Window Mode"
+align = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Video/ScrollContainer2/MarginContainer/CenterContainer/HBoxContainer"]
+margin_left = 718.0
+margin_right = 1144.0
+margin_bottom = 79.0
+alignment = 2
+
+[node name="ScreenType" parent="TabContainer/Video/ScrollContainer2/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+states = [ "Fullscreen", "Windowed", "Borderless" ]
+
+[node name="Audio" type="PanelContainer" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 87.0
+margin_right = -4.0
+margin_bottom = -4.0
+rect_min_size = Vector2( 0, 1353 )
+
+[node name="ScrollContainer4" type="ScrollContainer" parent="TabContainer/Audio"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 2545.0
+margin_bottom = 1346.0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Audio/ScrollContainer4"]
+margin_right = 2530.0
+margin_bottom = 109.0
+custom_constants/margin_top = 30
+
+[node name="CenterContainer" type="CenterContainer" parent="TabContainer/Audio/ScrollContainer4/MarginContainer"]
+margin_top = 30.0
+margin_right = 2530.0
+margin_bottom = 109.0
+rect_min_size = Vector2( 2530, 0 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Audio/ScrollContainer4/MarginContainer/CenterContainer"]
+margin_left = 578.0
+margin_right = 1952.0
+margin_bottom = 79.0
+custom_constants/separation = 250
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/Audio/ScrollContainer4/MarginContainer/CenterContainer/HBoxContainer"]
+margin_right = 499.0
+margin_bottom = 79.0
+
+[node name="Label" type="Label" parent="TabContainer/Audio/ScrollContainer4/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer2"]
+margin_right = 499.0
+margin_bottom = 79.0
+text = "Master Volume"
+align = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Audio/ScrollContainer4/MarginContainer/CenterContainer/HBoxContainer"]
+margin_left = 749.0
+margin_right = 1374.0
+margin_bottom = 79.0
+alignment = 2
+
+[node name="MasterVolumeSlider" parent="TabContainer/Audio/ScrollContainer4/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+margin_right = 625.0
+margin_bottom = 79.0
+
+[node name="BackButton" type="Button" parent="."]
+margin_right = 218.0
+margin_bottom = 79.0
+text = "Back"
+
+[connection signal="changed" from="TabContainer/General/ScrollContainer3/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer/ScreenType" to="." method="_on_screen_type_changed"]
+[connection signal="changed" from="TabContainer/Video/ScrollContainer2/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer/ScreenType" to="." method="_on_screen_type_changed"]
+[connection signal="value_changed" from="TabContainer/Audio/ScrollContainer4/MarginContainer/CenterContainer/HBoxContainer/VBoxContainer/MasterVolumeSlider" to="." method="_on_master_volume_changed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

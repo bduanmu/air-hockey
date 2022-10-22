@@ -10,7 +10,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if (position - get_global_mouse_position()).length_squared() <= 16:
-		return
-	move_and_slide((get_global_mouse_position() - position).normalized() * speed)
+	if (position - get_global_mouse_position()).length_squared() <= pow(speed / 60, 2):
+		move_and_slide((get_global_mouse_position() - position) * 60)
+	else:
+		move_and_slide((get_global_mouse_position() - position).normalized() * speed)
 	position = Vector2(int(position.x), int(position.y))

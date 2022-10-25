@@ -43,8 +43,8 @@ func reset() -> void:
 	if ball != null:
 		ball.queue_free()
 	ball = preload("res://Ball.tscn").instance()
-	map.call_deferred("add_child", ball)
-	ball.set_deferred("position", Vector2(2560 / 2, 820))
+	map.add_child(ball)
+	ball.position = Vector2(2560 / 2, 820)
 	
 	players[players.keys()[0]].position = Vector2(320, 820)
 	players[players.keys()[1]].position = Vector2(2560 - 320, 820)

@@ -91,7 +91,7 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 	
 	# DESERIALIZE CUSTOM MESSAGES ##############################################
 	if msg_type == Client.PLAYER_INPUT:
-		message["id"] = data & (1 << SIZE_OF_POSITION) - 1
+		message["id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
 		data >>= SIZE_OF_PLAYER_ID
 		
 		message["posn_x"] = data & (1 << SIZE_OF_POSITION) - 1
@@ -100,7 +100,7 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		message["posn_y"] = data & (1 << SIZE_OF_POSITION) - 1
 		data >>= SIZE_OF_POSITION
 	elif msg_type == Server.PLAYER_UPDATE:
-		message["id"] = data & (1 << SIZE_OF_POSITION) - 1
+		message["id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
 		data >>= SIZE_OF_PLAYER_ID
 		
 		message["posn_x"] = data & (1 << SIZE_OF_POSITION) - 1

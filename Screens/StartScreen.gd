@@ -6,6 +6,8 @@ func _on_settings_button_pressed() -> void:
 
 
 func _on_play_button_pressed() -> void:
+	Online.create_lobby(Online.LobbyType.PUBLIC, 8)
+	Client.set_game_state(Client.GameState.CREATING_LOBBY)
 	get_parent().transition(ScreenManager.Screens.LOBBY)
 
 

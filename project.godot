@@ -24,15 +24,30 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://UI/HSliderWithLabel.gd"
 }, {
+"base": "Control",
+"class": "LobbyMember",
+"language": "GDScript",
+"path": "res://Online/LobbyMember.gd"
+}, {
 "base": "Node2D",
 "class": "Map",
 "language": "GDScript",
 "path": "res://Maps/Map.gd"
 }, {
 "base": "KinematicBody2D",
+"class": "OnlinePlayer",
+"language": "GDScript",
+"path": "res://Online/OnlinePlayer.gd"
+}, {
+"base": "OnlinePlayer",
 "class": "Player",
 "language": "GDScript",
 "path": "res://Player.gd"
+}, {
+"base": "Node",
+"class": "Protobuf",
+"language": "GDScript",
+"path": "res://Online/Protobuf.gd"
 }, {
 "base": "Control",
 "class": "Screen",
@@ -53,8 +68,11 @@ _global_script_class_icons={
 "Carousel": "",
 "GameScreen": "",
 "HSliderWithLabel": "",
+"LobbyMember": "",
 "Map": "",
+"OnlinePlayer": "",
 "Player": "",
+"Protobuf": "",
 "Screen": "",
 "ScreenManager": "",
 "SettingsScreen": ""
@@ -69,6 +87,12 @@ config/icon="res://icon.png"
 [audio]
 
 default_bus_layout=""
+
+[autoload]
+
+Online="*res://Online/Online.gd"
+Client="*res://Online/Client.gd"
+Server="*res://Online/Server.gd"
 
 [display]
 

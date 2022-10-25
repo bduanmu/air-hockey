@@ -70,7 +70,7 @@ func on_data_received(online_id: int, message: PoolByteArray) -> void:
 
 func handle_custom_message(online_id: int, msg: Dictionary) -> void:
 	if msg["type"] == Protobuf.Server.PLAYER_UPDATE:
-		emit_signal("player_update_msg_received", online_id, msg)
+		emit_signal("player_update_msg_received", msg)
 
 
 #func disconnect_from_server() -> void:

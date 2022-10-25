@@ -23,16 +23,17 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	
 	# Initialize players
 	for player in players:
-		player.queue_free()
+		players[player].queue_free()
 	players = {}
 	
-	for member in lobby_data["members"]:
+	for i in range(lobby_data["members"].size()):
 		var player = preload("res://Player.tscn").instance()
-		player.online_id = member.online_id
+		player.local_id = i + 1 # Use +1 because invalid can be 0.
+		player.online_id = lobby_data["members"][i].online_id
 		if player.online_id == Online.get_online_id():
 			player.is_local = true
 		map.add_child(player)
-		players[player.online_id] = player
+		players[player.local_id] = player
 	
 	scores = [0, 0]
 	reset()
@@ -46,7 +47,7 @@ func reset() -> void:
 	ball.set_deferred("position", Vector2(2560 / 2, 820))
 	
 	players[players.keys()[0]].position = Vector2(320, 820)
-#	players[players.keys()[1]].position = Vector2(2560 - 320, 820)
+	players[players.keys()[1]].position = Vector2(2560 - 320, 820)
 
 
 func on_goal_scored(side: int) -> void:
@@ -54,9 +55,9 @@ func on_goal_scored(side: int) -> void:
 	reset()
 
 
-func _on_player_input_msg_received(online_id: int, msg: Dictionary) -> void:
-	players[online_id].on_receive_input_update(Vector2(msg["posn_x"], msg["posn_y"]))
+func _on_player_input_msg_received(msg: Dictionary) -> void:
+	players[msg["id"]].on_receive_input_update(Vector2(msg["posn_x"], msg["posn_y"]))
 
 
-func _on_player_update_msg_received(online_id: int, msg: Dictionary) -> void:
-	players[online_id].on_receive_player_update(Vector2(msg["posn_x"], msg["posn_y"]))
+func _on_player_update_msg_received(msg: Dictionary) -> void:
+	players[msg["id"]].on_receive_player_update(Vector2(msg["posn_x"], msg["posn_y"]))

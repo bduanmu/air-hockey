@@ -13,7 +13,7 @@ func _physics_process(delta: float) -> void:
 	if !is_local:
 		return
 	# Send my mouse position to the server
-	var msg := Protobuf.create_client_input_msg(get_global_mouse_position().x, get_global_mouse_position().y)
+	var msg := Protobuf.create_client_input_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
 	Client.send_data_to_server(msg, Online.Send.UNRELIABLE)
 
 
@@ -26,7 +26,7 @@ func on_receive_input_update(mouse_posn: Vector2) -> void:
 	position = Vector2(int(position.x), int(position.y))
 	
 	# I've calculated my position. Send it to all clients.
-	var msg := Protobuf.create_server_player_update_msg(position.x, position.y)
+	var msg := Protobuf.create_server_player_update_msg(local_id, position.x, position.y)
 	Server.send_data_to_all_clients(msg, Online.Send.UNRELIABLE)
 
 

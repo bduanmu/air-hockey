@@ -4,6 +4,7 @@ extends Node2D # SET TO AUTOLOAD
 signal game_authenticated
 # CUSTOM SIGNALS ###############################################################
 signal player_update_msg_received
+signal ball_update_msg_received
 ################################################################################
 
 
@@ -51,7 +52,7 @@ func _connect_signals() -> void:
 
 
 func _receive_network_data() -> void:
-	var messages := Online.receive_messages_on_channel(Online.Channel.CLIENT, 32)
+	var messages = Online.receive_messages_on_channel(Online.Channel.CLIENT, 32)
 	for message in messages:
 		on_data_received(Online.get_identity_id(message["identity"]), message["payload"])
 
@@ -71,6 +72,8 @@ func on_data_received(online_id: int, message: PoolByteArray) -> void:
 func handle_custom_message(online_id: int, msg: Dictionary) -> void:
 	if msg["type"] == Protobuf.Server.PLAYER_UPDATE:
 		emit_signal("player_update_msg_received", msg)
+	elif msg["type"] == Protobuf.Server.BALL_UPDATE:
+		emit_signal("ball_update_msg_received", msg)
 
 
 #func disconnect_from_server() -> void:
@@ -109,7 +112,7 @@ func send_data_to_server(msg: PoolByteArray, flags: int) -> void:
 	if Online.API == Online.NONE or Online.get_online_id() == server_id:
 		Server.on_data_received(server_id, msg)
 	else:
-		var result := Online.send_message_to_user(server_id, msg, flags, Online.Channel.SERVER)
+		var result = Online.send_message_to_user(server_id, msg, flags, Online.Channel.SERVER)
 		if result != Online.Result.OK:
 			print_debug("Failed sending data to server: ", result)
 

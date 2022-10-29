@@ -5,6 +5,7 @@ var map: Map
 var scores: Array
 var players: Dictionary
 var ball: RigidBody2D
+var ball_sprite: Sprite
 var rng: RandomNumberGenerator
 
 
@@ -15,6 +16,7 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	# Connect to signals
 	Server.connect("player_input_msg_received", self, "_on_player_input_msg_received")
 	Client.connect("player_update_msg_received", self, "_on_player_update_msg_received")
+	Client.connect("ball_update_msg_received", self, "_on_ball_update_msg_received")
 	
 	# Initialize the map
 	map = lobby_data["map"]
@@ -42,12 +44,21 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 func reset() -> void:
 	if ball != null:
 		ball.queue_free()
-	ball = preload("res://Ball.tscn").instance()
-	map.add_child(ball)
-	ball.position = Vector2(2560 / 2, 820)
+	if ball_sprite != null:
+		ball_sprite.queue_free()
 	
 	players[players.keys()[0]].position = Vector2(320, 820)
-	players[players.keys()[1]].position = Vector2(2560 - 320, 820)
+	if players.size() > 1:
+		players[players.keys()[1]].position = Vector2(2560 - 320, 820)
+	
+	if Client.i_am_server():
+		ball = preload("res://Ball.tscn").instance()
+		ball.position = Vector2(2560 / 2, 820)
+		map.add_child(ball)
+	
+	ball_sprite = preload("res://BallSprite.tscn").instance()
+	ball_sprite.position = Vector2(2560 / 2, 820)
+	map.add_child(ball_sprite)
 
 
 func on_goal_scored(side: int) -> void:
@@ -61,3 +72,7 @@ func _on_player_input_msg_received(msg: Dictionary) -> void:
 
 func _on_player_update_msg_received(msg: Dictionary) -> void:
 	players[msg["id"]].on_receive_player_update(Vector2(msg["posn_x"], msg["posn_y"]))
+
+
+func _on_ball_update_msg_received(msg: Dictionary) -> void:
+	ball_sprite.position = Vector2(msg["posn_x"], msg["posn_y"])

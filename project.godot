@@ -90,8 +90,8 @@ default_bus_layout=""
 
 [autoload]
 
-Online="*res://Online/Online.gd"
 Client="*res://Online/Client.gd"
+Online="*res://Online/Online.gd"
 Server="*res://Online/Server.gd"
 
 [display]

@@ -23,6 +23,7 @@ enum Server {
 	START_GAME = Client.NUM_CLIENT_ENUMS,
 	# CUSTOM ENUMS #############################################################
 	PLAYER_UPDATE,
+	BALL_UPDATE,
 	############################################################################
 }
 
@@ -74,6 +75,18 @@ static func create_server_player_update_msg(id: int, posn_x: int, posn_y: int) -
 	return to_bytes(data)
 
 
+static func create_server_ball_update_msg(posn_x: int, posn_y: int) -> PoolByteArray:
+	var data := posn_y
+	
+	data <<= SIZE_OF_POSITION
+	data |= posn_x
+	
+	data <<= SIZE_OF_MSG_TYPE
+	data |= Server.BALL_UPDATE
+	
+	return to_bytes(data)
+
+
 ################################################################################
 
 
@@ -103,6 +116,12 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		message["id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
 		data >>= SIZE_OF_PLAYER_ID
 		
+		message["posn_x"] = data & (1 << SIZE_OF_POSITION) - 1
+		data >>= SIZE_OF_POSITION
+		
+		message["posn_y"] = data & (1 << SIZE_OF_POSITION) - 1
+		data >>= SIZE_OF_POSITION
+	elif msg_type == Server.BALL_UPDATE:
 		message["posn_x"] = data & (1 << SIZE_OF_POSITION) - 1
 		data >>= SIZE_OF_POSITION
 		

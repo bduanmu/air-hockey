@@ -28,8 +28,11 @@ func _integrate_forces(state: Physics2DDirectBodyState) -> void:
 		if last_server_velocity != max_speed * Vector2(2, 2):
 			state.set_linear_velocity(last_server_velocity)
 			last_server_velocity = max_speed * Vector2(2, 2)
-		if last_server_position != Vector2(-100, -100) and (state.transform.get_origin() - last_server_position).length_squared() >= 16:
-			state.transform.origin = last_server_position
+		if last_server_position != Vector2(-100, -100):
+			if (state.transform.get_origin() - last_server_position).length_squared() >= 100:
+				state.transform.origin = last_server_position
+			elif (state.transform.get_origin() - last_server_position).length_squared() >= 4:
+				state.transform.origin = lerp(state.transform.origin, last_server_position, 0.1)
 			last_server_position = Vector2(-100, -100)
 
 

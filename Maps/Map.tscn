@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Maps/Map.gd" type="Script" id=1]
 
@@ -13,6 +13,9 @@ extents = Vector2( 250, 160 )
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 210, 200 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 300, 300 )
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 20, 200 )
@@ -71,8 +74,10 @@ position = Vector2( 2760, 200 )
 rotation = 1.5708
 polygon = PoolVector2Array( 100, 460, 260, 300, 260, -120, -320, 460 )
 
-[node name="CollisionPolygon2D7" type="CollisionPolygon2D" parent="Walls"]
-polygon = PoolVector2Array( 100, 460, 260, 300, 260, -120, -320, 460 )
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Walls"]
+position = Vector2( 30, 110 )
+rotation = 0.785398
+shape = SubResource( 6 )
 
 [node name="GoalLeft" type="Area2D" parent="."]
 collision_layer = 0

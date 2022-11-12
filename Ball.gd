@@ -4,8 +4,8 @@ extends RigidBody2D
 export(int, 1, 100000) var max_speed
 
 
-var last_server_position: Vector2 = Vector2(2560 / 2, 820)
-var last_server_velocity: Vector2
+onready var last_server_position: Vector2 = Vector2(2560 / 2, 820)
+onready var last_server_velocity: Vector2
 
 
 # Called when the node enters the scene tree for the first time.

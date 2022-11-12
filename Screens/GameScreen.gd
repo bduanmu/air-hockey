@@ -45,8 +45,18 @@ func reset() -> void:
 		ball.queue_free()
 	
 	players[players.keys()[0]].position = Vector2(320, 820)
+	players[players.keys()[0]].get_node("Camera2D").reset_smoothing()
+	players[players.keys()[0]].can_move = false
 	if players.size() > 1:
 		players[players.keys()[1]].position = Vector2(2560 - 320, 820)
+		players[players.keys()[1]].get_node("Camera2D").reset_smoothing()
+		players[players.keys()[1]].can_move = false
+	
+	yield(get_tree().create_timer(0.5), "timeout")
+	
+	players[players.keys()[0]].can_move = true
+	if players.size() > 1:
+		players[players.keys()[1]].can_move = true
 	
 	ball = preload("res://Ball.tscn").instance()
 	ball.position = Vector2(2560 / 2, 820)

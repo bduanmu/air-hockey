@@ -97,6 +97,7 @@ func _on_lobby_data_update(_lobby_id: int, member_id: int) -> void:
 	if lobby_id == member_id: # The lobby made the change
 		var lobby_seed := Online.get_lobby_data(lobby_id, "game_starting")
 		if lobby_seed != "":
+			hide()
 			var host_id := Online.get_lobby_owner(lobby_id)
 			emit_signal("start_game", _create_lobby_data(), lobby_id, host_id, int(lobby_seed))
 	else:

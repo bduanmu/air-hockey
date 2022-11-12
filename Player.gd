@@ -4,13 +4,16 @@ class_name Player extends OnlinePlayer
 export (int, 0, 10000) var speed: int = 500
 
 
+var can_move: bool = false
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
 
 func _physics_process(delta: float) -> void:
-	if !is_local:
+	if !is_local or !can_move:
 		return
 	# Send my mouse position to the server
 	var msg := Protobuf.create_client_input_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)

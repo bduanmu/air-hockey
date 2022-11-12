@@ -15,15 +15,21 @@ func _physics_process(delta: float) -> void:
 	# Send my mouse position to the server
 	var msg := Protobuf.create_client_input_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
 	Client.send_data_to_server(msg, Online.Send.UNRELIABLE)
+	
+	move(get_global_mouse_position())
 
 
-# Server receives input messages from Client and calls this function.
-func on_receive_input_update(mouse_posn: Vector2) -> void:
+func move(mouse_posn: Vector2) -> void:
 	if (position - mouse_posn).length_squared() <= pow(speed / 60, 2):
 		move_and_slide((mouse_posn - position) * 60)
 	else:
 		move_and_slide((mouse_posn - position).normalized() * speed)
 	position = Vector2(int(position.x), int(position.y))
+
+
+# Server receives input messages from Client and calls this function.
+func on_receive_input_update(mouse_posn: Vector2) -> void:
+	move(mouse_posn)
 	
 	# I've calculated my position. Send it to all clients.
 	var msg := Protobuf.create_server_player_update_msg(local_id, position.x, position.y)

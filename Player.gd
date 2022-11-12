@@ -38,4 +38,8 @@ func on_receive_input_update(mouse_posn: Vector2) -> void:
 
 # Client receives player updates from Server and calls this function.
 func on_receive_player_update(posn: Vector2) -> void:
-	position = posn # TODO: Check physics here!
+	# TODO: Check physics here!
+	if (position - posn).length_squared() >= 100:
+		position = posn
+	else:
+		position = lerp(position, posn, 0.1)

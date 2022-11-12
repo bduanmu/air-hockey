@@ -76,4 +76,5 @@ text = "Invite"
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="text_entered" from="LineEdit" to="." method="_on_text_entered"]
 [connection signal="pressed" from="InviteButton" to="." method="_on_invite_button_pressed"]

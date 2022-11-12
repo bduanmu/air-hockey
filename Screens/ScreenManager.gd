@@ -21,6 +21,7 @@ var current_screen
 func _ready() -> void:
 	Online.init()
 	Client.connect("game_authenticated", self, "_on_game_authenticated")
+	Online.connect("lobby_entered", self, "_on_lobby_entered")
 	current_screen = screens[Screens.START]
 
 
@@ -32,3 +33,7 @@ func transition(next_screen_index: int) -> void:
 
 func _on_game_authenticated(lobby_seed: int) -> void:
 	transition(Screens.GAME)
+
+
+func _on_lobby_entered(lobby_id: int) -> void:
+	transition(Screens.LOBBY)

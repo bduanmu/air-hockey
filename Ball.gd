@@ -4,7 +4,7 @@ extends RigidBody2D
 export(int, 1, 100000) var max_speed
 
 
-var last_server_position: Vector2
+var last_server_position: Vector2 = Vector2(2560 / 2, 820)
 var last_server_velocity: Vector2
 
 

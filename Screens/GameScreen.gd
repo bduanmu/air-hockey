@@ -6,6 +6,9 @@ var scores: Array
 var players: Dictionary
 var ball: RigidBody2D
 var rng: RandomNumberGenerator
+var time_remaining: int
+var is_overtime: bool
+var local_id: int
 
 
 func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_seed: int) -> void:
@@ -33,10 +36,16 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		player.online_id = lobby_data["members"][i].online_id
 		if player.online_id == Online.get_online_id():
 			player.is_local = true
+			local_id = i
 		map.add_child(player)
 		players[player.local_id] = player
 	
+	$"%Timer".start()
+	$"%Timer".set_paused(true)
+	time_remaining = 5
+	
 	scores = [0, 0]
+	is_overtime = false
 	reset()
 
 
@@ -52,7 +61,8 @@ func reset() -> void:
 		players[players.keys()[1]].get_node("Camera2D").reset_smoothing()
 		players[players.keys()[1]].can_move = false
 	
-	yield(get_tree().create_timer(0.5), "timeout")
+	yield(get_tree().create_timer(3), "timeout")
+	$"%Timer".set_paused(false)
 	
 	players[players.keys()[0]].can_move = true
 	if players.size() > 1:
@@ -64,8 +74,37 @@ func reset() -> void:
 
 
 func on_goal_scored(side: int) -> void:
-	scores[side] += 1
-	reset()
+	scores[int(side == 0)] += 1
+	if side == 0:
+		$"%RightScore".text = str(scores[1])
+	else: 
+		$"%LeftScore".text = str(scores[0])
+	$"%Timer".set_paused(true)
+	if is_overtime:
+		declare_winner()
+	else:
+		reset()
+
+
+func _on_timer_timeout() -> void:
+	if is_overtime:
+		time_remaining += 1
+	else:
+		time_remaining -= 1
+	$"%TimerLabel".text = "%d:%02d" % [time_remaining / 60, time_remaining % 60]
+	if time_remaining == 0: 
+		if scores[0] == scores[1]:
+			is_overtime = true
+			$"%OvertimeLabel".show()
+		else:
+			declare_winner()
+
+
+func declare_winner() -> void:
+	if scores[local_id - 1] < scores[local_id % 2]:
+		print("win")
+	else:
+		print("lose")
 
 
 func _on_player_input_msg_received(msg: Dictionary) -> void:

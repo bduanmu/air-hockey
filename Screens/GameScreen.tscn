@@ -42,9 +42,6 @@ margin_right = 1411.0
 margin_bottom = 229.0
 text = "5:00"
 
-[node name="Timer" type="Timer" parent="."]
-unique_name_in_owner = true
-
 [node name="OvertimeLabel" type="Label" parent="."]
 unique_name_in_owner = true
 visible = false
@@ -55,4 +52,14 @@ margin_bottom = 178.0
 custom_fonts/font = SubResource( 2 )
 text = "Overtime"
 
+[node name="Timer" type="Timer" parent="."]
+unique_name_in_owner = true
+
+[node name="TransitionTimer" type="Timer" parent="."]
+pause_mode = 2
+unique_name_in_owner = true
+wait_time = 3.0
+one_shot = true
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="TransitionTimer" to="." method="_quit_to_lobby"]

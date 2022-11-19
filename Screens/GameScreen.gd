@@ -1,6 +1,9 @@
 class_name GameScreen extends Screen
 
 
+signal quit_to_lobby
+
+
 var map: Map
 var scores: Array
 var players: Dictionary
@@ -101,11 +104,18 @@ func _on_timer_timeout() -> void:
 
 
 func declare_winner() -> void:
+	get_tree().paused = true
 	if scores[local_id - 1] < scores[local_id % 2]:
 		print("win")
 	else:
 		print("lose")
+	$"%TransitionTimer".start()
 
+
+func _quit_to_lobby() -> void:
+	map.queue_free()
+	get_tree().paused = false
+	get_parent().transition(ScreenManager.Screens.LOBBY)
 
 func _on_player_input_msg_received(msg: Dictionary) -> void:
 	players[msg["id"]].on_receive_input_update(Vector2(msg["posn_x"], msg["posn_y"]))
@@ -116,4 +126,6 @@ func _on_player_update_msg_received(msg: Dictionary) -> void:
 
 
 func _on_ball_update_msg_received(msg: Dictionary) -> void:
-	ball.on_receive_ball_update(Vector2(msg["posn_x"], msg["posn_y"]), Vector2(msg["vel_x"] - ball.max_speed, msg["vel_y"] - ball.max_speed))
+	if is_instance_valid(ball):
+		ball.on_receive_ball_update(Vector2(msg["posn_x"], msg["posn_y"]), Vector2(msg["vel_x"] - ball.max_speed, msg["vel_y"] - ball.max_speed))
+

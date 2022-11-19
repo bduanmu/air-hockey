@@ -19,9 +19,12 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	rng.seed = lobby_seed
 	
 	# Connect to signals
-	Server.connect("player_input_msg_received", self, "_on_player_input_msg_received")
-	Client.connect("player_update_msg_received", self, "_on_player_update_msg_received")
-	Client.connect("ball_update_msg_received", self, "_on_ball_update_msg_received")
+	if !Server.is_connected("player_input_msg_received", self, "_on_player_input_msg_received"):
+		Server.connect("player_input_msg_received", self, "_on_player_input_msg_received")
+	if !Client.is_connected("player_update_msg_received", self, "_on_player_update_msg_received"):
+		Client.connect("player_update_msg_received", self, "_on_player_update_msg_received")
+	if !Client.is_connected("ball_update_msg_received", self, "_on_ball_update_msg_received"):
+		Client.connect("ball_update_msg_received", self, "_on_ball_update_msg_received")
 	
 	# Initialize the map
 	map = lobby_data["map"]
@@ -29,8 +32,8 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	map.connect("goal_scored", self, "on_goal_scored")
 	
 	# Initialize players
-	for player in players:
-		players[player].queue_free()
+#	for player in players:
+#		players[player].queue_free()
 	players = {}
 	
 	for i in range(lobby_data["members"].size()):
@@ -43,17 +46,22 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		map.add_child(player)
 		players[player.local_id] = player
 	
+	$"%TimerLabel".text = "5:00"
+	$"%OvertimeLabel".hide()
 	$"%Timer".start()
 	$"%Timer".set_paused(true)
 	time_remaining = 5
 	
+	$"%LeftScore".text = "0"
+	$"%RightScore".text = "0"
 	scores = [0, 0]
+	
 	is_overtime = false
 	reset()
 
 
 func reset() -> void:
-	if ball != null:
+	if is_instance_valid(ball):
 		ball.queue_free()
 	
 	players[players.keys()[0]].position = Vector2(320, 820)
@@ -118,11 +126,13 @@ func _quit_to_lobby() -> void:
 	get_parent().transition(ScreenManager.Screens.LOBBY)
 
 func _on_player_input_msg_received(msg: Dictionary) -> void:
-	players[msg["id"]].on_receive_input_update(Vector2(msg["posn_x"], msg["posn_y"]))
+	if is_instance_valid(players[msg["id"]]):
+		players[msg["id"]].on_receive_input_update(Vector2(msg["posn_x"], msg["posn_y"]))
 
 
 func _on_player_update_msg_received(msg: Dictionary) -> void:
-	players[msg["id"]].on_receive_player_update(Vector2(msg["posn_x"], msg["posn_y"]))
+	if is_instance_valid(players[msg["id"]]):
+		players[msg["id"]].on_receive_player_update(Vector2(msg["posn_x"], msg["posn_y"]))
 
 
 func _on_ball_update_msg_received(msg: Dictionary) -> void:

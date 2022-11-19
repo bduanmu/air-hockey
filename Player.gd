@@ -5,11 +5,12 @@ export (int, 0, 10000) var speed: int = 500
 
 
 var can_move: bool = false
+var last_server_time: int
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	last_server_time = OS.get_system_time_msecs()
 
 
 func _physics_process(delta: float) -> void:
@@ -32,7 +33,11 @@ func move(mouse_posn: Vector2) -> void:
 
 # Server receives input messages from Client and calls this function.
 func on_receive_input_update(mouse_posn: Vector2) -> void:
-	move(mouse_posn)
+	var now = OS.get_system_time_msecs()
+	while last_server_time < now:
+		move(mouse_posn)
+		last_server_time += 17
+	last_server_time = now
 	
 	# I've calculated my position. Send it to all clients.
 	var msg := Protobuf.create_server_player_update_msg(local_id, position.x, position.y)

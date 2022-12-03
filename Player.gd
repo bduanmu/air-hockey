@@ -14,13 +14,19 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if !is_local or !can_move:
+	if !is_local or !can_move or !OS.is_window_focused():
 		return
+	
+	var mouse_position := get_global_mouse_position()
+	mouse_position.x = clamp(mouse_position.x, 0, 2560)
+	mouse_position.y = clamp(mouse_position.y, 0, 1440)
+	
 	# Send my mouse position to the server
-	var msg := Protobuf.create_client_input_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
+	var msg := Protobuf.create_client_input_msg(local_id, mouse_position.x, mouse_position.y)
 	Client.send_data_to_server(msg, Online.Send.UNRELIABLE)
 	
-	move(get_global_mouse_position())
+	if !Client.i_am_server():
+		move(mouse_position)
 
 
 func move(mouse_posn: Vector2) -> void:
@@ -34,9 +40,11 @@ func move(mouse_posn: Vector2) -> void:
 # Server receives input messages from Client and calls this function.
 func on_receive_input_update(mouse_posn: Vector2) -> void:
 	var now = OS.get_system_time_msecs()
-	while last_server_time < now:
+	var i = 0
+	while last_server_time < now and i < 3:
 		move(mouse_posn)
 		last_server_time += 17
+		i += 1
 	last_server_time = now
 	
 	# I've calculated my position. Send it to all clients.

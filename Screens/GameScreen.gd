@@ -76,8 +76,10 @@ func reset() -> void:
 	$"%Timer".set_paused(false)
 	
 	players[players.keys()[0]].can_move = true
+	players[players.keys()[0]].last_server_time = OS.get_system_time_msecs()
 	if players.size() > 1:
 		players[players.keys()[1]].can_move = true
+		players[players.keys()[1]].last_server_time = OS.get_system_time_msecs()
 	
 	ball = preload("res://Ball.tscn").instance()
 	ball.position = Vector2(2560 / 2, 820)

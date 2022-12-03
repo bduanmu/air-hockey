@@ -12,9 +12,9 @@ var last_server_time: int
 func _ready() -> void:
 	$Sprite.scale = Vector2(1, 1) * ($CollisionShape2D.shape.radius * 2) / 256
 	if local_id == 2:
-		$Sprite.modulate = Color.red
+		$Sprite.modulate = Color.red * 1.3
 	else:
-		$Sprite.modulate = Color.blue
+		$Sprite.modulate = Color.blue * 1.3
 	last_server_time = OS.get_system_time_msecs()
 
 

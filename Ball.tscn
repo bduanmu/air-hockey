@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Ball.gd" type="Script" id=1]
 [ext_resource path="res://Sprite.png" type="Texture" id=2]
@@ -8,6 +8,13 @@ bounce = 1.0
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 35.0
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.3 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0, 0.642458, 1 )
+colors = PoolColorArray( 1, 1, 1, 0.537255, 1, 1, 1, 0.0391061, 1, 1, 1, 0 )
 
 [node name="RigidBody2D" type="RigidBody2D"]
 collision_layer = 2
@@ -23,3 +30,10 @@ shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PoolVector2Array( 150, -30, 300, 60, 420, 110, 600, 200 )
+width = 70.0
+width_curve = SubResource( 3 )
+default_color = Color( 0.4, 0.501961, 1, 1 )
+gradient = SubResource( 4 )

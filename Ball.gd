@@ -7,10 +7,20 @@ export(int, 1, 100000) var max_speed
 onready var last_server_position: Vector2 = Vector2(2560 / 2, 820)
 onready var last_server_velocity: Vector2
 
+var trail_length: int = 30
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Sprite.scale = Vector2(1, 1) * ($CollisionShape2D.shape.radius * 2) / 256
+	$Line2D.points = []
+	$Line2D.set_as_toplevel(true)
+
+
+func _process(delta: float) -> void:
+	$Line2D.add_point(position, 0)
+	if len($Line2D.points) > trail_length:
+		$Line2D.remove_point(len($Line2D.points) - 1)
 
 
 func _physics_process(delta: float) -> void:

@@ -10,7 +10,7 @@ onready var last_server_velocity: Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	$Sprite.scale = Vector2(1, 1) * ($CollisionShape2D.shape.radius * 2) / 256
 
 
 func _physics_process(delta: float) -> void:

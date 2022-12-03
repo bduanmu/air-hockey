@@ -10,6 +10,11 @@ var last_server_time: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$Sprite.scale = Vector2(1, 1) * ($CollisionShape2D.shape.radius * 2) / 256
+	if local_id == 2:
+		$Sprite.modulate = Color.red
+	else:
+		$Sprite.modulate = Color.blue
 	last_server_time = OS.get_system_time_msecs()
 
 

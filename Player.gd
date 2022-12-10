@@ -6,15 +6,17 @@ export (int, 0, 10000) var speed: int = 500
 
 var can_move: bool = false
 var last_server_time: int
+var direction: Vector2
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Sprite.scale = Vector2(1, 1) * ($CollisionShape2D.shape.radius * 2) / 256
+	$Sprite.scale *= ($CollisionShape2D.shape.radius * 2) / 256
+	$Sprite2.scale *= ($CollisionShape2D.shape.radius * 2) / 256
 	if local_id == 2:
-		$Sprite.modulate = Color.red * 1.3
+		$Sprite2.modulate = Color.red * 1.3
 	else:
-		$Sprite.modulate = Color.blue * 1.3
+		$Sprite2.modulate = Color.blue * 1.3
 	last_server_time = OS.get_system_time_msecs()
 
 
@@ -35,10 +37,11 @@ func _physics_process(delta: float) -> void:
 
 
 func move(mouse_posn: Vector2) -> void:
+	direction = (mouse_posn - position).normalized()
 	if (position - mouse_posn).length_squared() <= pow(speed / 60, 2):
 		move_and_slide((mouse_posn - position) * 60)
 	else:
-		move_and_slide((mouse_posn - position).normalized() * speed)
+		move_and_slide(direction * speed)
 	position = Vector2(int(position.x), int(position.y))
 
 

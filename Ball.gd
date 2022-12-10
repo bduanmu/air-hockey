@@ -21,6 +21,7 @@ func _process(delta: float) -> void:
 	$Line2D.add_point(position, 0)
 	if len($Line2D.points) > trail_length:
 		$Line2D.remove_point(len($Line2D.points) - 1)
+	$Sprite.modulate = lerp($Sprite.modulate, Color.white * 1.13, 0.03)
 
 
 func _physics_process(delta: float) -> void:
@@ -49,3 +50,10 @@ func _integrate_forces(state: Physics2DDirectBodyState) -> void:
 func on_receive_ball_update(posn: Vector2, velocity: Vector2) -> void:
 	last_server_position = posn
 	last_server_velocity = velocity
+
+
+func _on_body_entered(body: Node) -> void:
+	var velocity = Vector2(0, 0)
+	if body is KinematicBody2D:
+		velocity = body.direction
+	$Sprite.modulate = Color.white * min(1.3, 1)

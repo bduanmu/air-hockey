@@ -50,7 +50,7 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	$"%OvertimeLabel".hide()
 	$"%Timer".start()
 	$"%Timer".set_paused(true)
-	time_remaining = 5
+	time_remaining = 5 * 60
 	
 	$"%LeftScore".text = "0"
 	$"%RightScore".text = "0"

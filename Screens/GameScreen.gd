@@ -46,11 +46,12 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		map.add_child(player)
 		players[player.local_id] = player
 	
+	$"%Scoreboard".show()
 	$"%TimerLabel".text = "5:00"
-	$"%OvertimeLabel".hide()
+	$"%OvertimeLabel".modulate = Color.transparent
 	$"%Timer".start()
 	$"%Timer".set_paused(true)
-	time_remaining = 5 * 60
+	time_remaining = 5 * 60 * 0 + 5
 	
 	$"%LeftScore".text = "0"
 	$"%RightScore".text = "0"
@@ -108,7 +109,7 @@ func _on_timer_timeout() -> void:
 	if time_remaining == 0: 
 		if scores[0] == scores[1]:
 			is_overtime = true
-			$"%OvertimeLabel".show()
+			$"%OvertimeLabel".modulate = Color.white
 		else:
 			declare_winner()
 
@@ -123,6 +124,7 @@ func declare_winner() -> void:
 
 
 func _quit_to_lobby() -> void:
+	$"%Scoreboard".hide()
 	map.queue_free()
 	get_tree().paused = false
 	get_parent().transition(ScreenManager.Screens.LOBBY)

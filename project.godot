@@ -45,6 +45,11 @@ _global_script_classes=[ {
 "path": "res://Player.gd"
 }, {
 "base": "Node",
+"class": "PowerUp",
+"language": "GDScript",
+"path": "res://PowerUp.gd"
+}, {
+"base": "Node",
 "class": "Protobuf",
 "language": "GDScript",
 "path": "res://Online/Protobuf.gd"
@@ -72,6 +77,7 @@ _global_script_class_icons={
 "Map": "",
 "OnlinePlayer": "",
 "Player": "",
+"PowerUp": "",
 "Protobuf": "",
 "Screen": "",
 "ScreenManager": "",

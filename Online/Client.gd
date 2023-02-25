@@ -5,6 +5,7 @@ signal game_authenticated
 # CUSTOM SIGNALS ###############################################################
 signal player_update_msg_received
 signal ball_update_msg_received
+signal powerup_collected_msg_received
 ################################################################################
 
 
@@ -74,6 +75,9 @@ func handle_custom_message(online_id: int, msg: Dictionary) -> void:
 		emit_signal("player_update_msg_received", msg)
 	elif msg["type"] == Protobuf.Server.BALL_UPDATE:
 		emit_signal("ball_update_msg_received", msg)
+	elif msg["type"] == Protobuf.Server.POWERUP_COLLECTED:
+		emit_signal("powerup_collected_msg_received", msg)
+	
 
 
 #func disconnect_from_server() -> void:

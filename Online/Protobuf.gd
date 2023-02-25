@@ -8,6 +8,7 @@ const SIZE_OF_MSG_TYPE := 5 # 32
 const SIZE_OF_PLAYER_ID := 2 # 4
 const SIZE_OF_POSITION := 12 # 4096
 const SIZE_OF_VELOCITY := 12
+const SIZE_OF_POWERUP_ID := 2
 ################################################################################
 
 
@@ -25,6 +26,7 @@ enum Server {
 	# CUSTOM ENUMS #############################################################
 	PLAYER_UPDATE,
 	BALL_UPDATE,
+	POWERUP_COLLECTED,
 	############################################################################
 }
 
@@ -94,6 +96,18 @@ static func create_server_ball_update_msg(posn_x: int, posn_y: int, vel_x: int, 
 	return to_bytes(data)
 
 
+static func create_server_powerup_collected_msg(collector: int, id: int) -> PoolByteArray:
+	var data := id
+	
+	data <<= SIZE_OF_PLAYER_ID
+	data |= collector
+	
+	data <<= SIZE_OF_MSG_TYPE
+	data |= Server.POWERUP_COLLECTED
+	
+	return to_bytes(data)
+
+
 ################################################################################
 
 
@@ -142,6 +156,13 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		
 		message["vel_y"] = data & (1 << SIZE_OF_VELOCITY) - 1
 		data >>= SIZE_OF_VELOCITY
+	
+	elif msg_type == Server.POWERUP_COLLECTED:
+		message["collector"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
+		data >>= SIZE_OF_PLAYER_ID
+		
+		message["id"] = data & (1 << SIZE_OF_POWERUP_ID) - 1
+		data >>= SIZE_OF_POWERUP_ID
 	############################################################################
 	
 	return message

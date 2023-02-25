@@ -25,6 +25,8 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		Client.connect("player_update_msg_received", self, "_on_player_update_msg_received")
 	if !Client.is_connected("ball_update_msg_received", self, "_on_ball_update_msg_received"):
 		Client.connect("ball_update_msg_received", self, "_on_ball_update_msg_received")
+	if !Client.is_connected("powerup_collected_msg_received", self, "_on_powerup_collected_msg_received"):
+		Client.connect("powerup_collected_msg_received", self, "_on_powerup_collected_msg_received")
 	
 	# Initialize the map
 	map = lobby_data["map"]
@@ -59,6 +61,11 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	
 	is_overtime = false
 	reset()
+	
+	spawn_powerup(preload("res://PowerUp.tscn").instance(), 0)
+	spawn_powerup(preload("res://PowerUp.tscn").instance(), 1)
+	spawn_powerup(preload("res://PowerUp.tscn").instance(), 3)
+	spawn_powerup(preload("res://PowerUp.tscn").instance(), 2)
 
 
 func reset() -> void:
@@ -85,6 +92,17 @@ func reset() -> void:
 	ball = preload("res://Ball.tscn").instance()
 	ball.position = Vector2(2560 / 2, 820)
 	map.add_child(ball)
+
+
+func spawn_powerup(powerup: PowerUp, id: int) -> void:
+	map.spawn_powerup(powerup, id)
+	if Client.i_am_server():
+		powerup.connect("collected", self, "_on_powerup_collected", [id])
+
+
+func _on_powerup_collected(collector: Player, id: int) -> void:
+	var msg := Protobuf.create_server_powerup_collected_msg(collector.local_id, id)
+	Server.send_data_to_all_clients(msg, Online.Send.RELIABLE)
 
 
 func on_goal_scored(side: int) -> void:
@@ -143,3 +161,6 @@ func _on_ball_update_msg_received(msg: Dictionary) -> void:
 	if is_instance_valid(ball):
 		ball.on_receive_ball_update(Vector2(msg["posn_x"], msg["posn_y"]), Vector2(msg["vel_x"] - ball.max_speed, msg["vel_y"] - ball.max_speed))
 
+
+func _on_powerup_collected_msg_received(msg: Dictionary) -> void:
+	map.on_powerup_collected(players[msg["collector"]], msg["id"])

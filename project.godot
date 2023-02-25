@@ -44,7 +44,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Player.gd"
 }, {
-"base": "Node",
+"base": "Area2D",
 "class": "PowerUp",
 "language": "GDScript",
 "path": "res://PowerUp.gd"
@@ -68,6 +68,11 @@ _global_script_classes=[ {
 "class": "SettingsScreen",
 "language": "GDScript",
 "path": "res://Screens/SettingsScreen.gd"
+}, {
+"base": "PowerUp",
+"class": "SizePowerUp",
+"language": "GDScript",
+"path": "res://SizePowerUp.gd"
 } ]
 _global_script_class_icons={
 "Carousel": "",
@@ -81,7 +86,8 @@ _global_script_class_icons={
 "Protobuf": "",
 "Screen": "",
 "ScreenManager": "",
-"SettingsScreen": ""
+"SettingsScreen": "",
+"SizePowerUp": ""
 }
 
 [application]

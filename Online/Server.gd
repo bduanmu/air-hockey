@@ -2,6 +2,7 @@ extends Node2D # SET TO AUTOLOAD
 
 # CUSTOM SIGNALS ###############################################################
 signal player_input_msg_received
+signal player_powerup_used_msg_received
 ################################################################################
 
 var lobby_members: Array
@@ -51,6 +52,8 @@ func on_data_received(online_id: int, message: PoolByteArray) -> void:
 func handle_custom_message(online_id: int, msg: Dictionary) -> void:
 	if msg["type"] == Protobuf.Client.PLAYER_INPUT:
 		emit_signal("player_input_msg_received", msg)
+	elif msg["type"] == Protobuf.Client.POWERUP_USED:
+		emit_signal("player_powerup_used_msg_received", msg, true)
 
 
 func send_data_to_client(online_id: int, msg: PoolByteArray, flags: int) -> void:

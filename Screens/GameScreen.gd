@@ -27,6 +27,8 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		Client.connect("ball_update_msg_received", self, "_on_ball_update_msg_received")
 	if !Client.is_connected("powerup_collected_msg_received", self, "_on_powerup_collected_msg_received"):
 		Client.connect("powerup_collected_msg_received", self, "_on_powerup_collected_msg_received")
+	if !Client.is_connected("player_powerup_used_msg_received", self, "_on_player_powerup_used_msg_received"):
+		Client.connect("player_powerup_used_msg_received", self, "_on_player_powerup_used_msg_received")
 	
 	# Initialize the map
 	map = lobby_data["map"]
@@ -103,6 +105,13 @@ func spawn_powerup(powerup: PowerUp, id: int) -> void:
 func _on_powerup_collected(collector: Player, id: int) -> void:
 	var msg := Protobuf.create_server_powerup_collected_msg(collector.local_id, id)
 	Server.send_data_to_all_clients(msg, Online.Send.RELIABLE)
+
+
+func _on_player_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
+	if is_server:
+		if players[msg["player_id"]].powerup != null and players[msg["player_id"]].powerup.is_valid:
+			players[msg["player_id"]].powerup.is_valid = false
+			Server.send_data_to_all_clients(Prot, Online.Send.RELIABLE)
 
 
 func on_goal_scored(side: int) -> void:

@@ -1,7 +1,9 @@
-class_name PowerUp extends Node
+class_name PowerUp extends Area2D
 
 
 signal collected
+
+var is_valid: bool
 
 
 # Called when the node enters the scene tree for the first time.
@@ -16,4 +18,8 @@ func _on_body_entered(body):
 
 func on_collected(player: Player) -> void:
 	print("collected")
-	queue_free()
+	hide()
+	monitoring = false
+	monitorable = false
+	player.powerup = self
+	is_valid = true

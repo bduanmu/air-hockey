@@ -16,6 +16,7 @@ enum Client {
 	INITIATE_CONNECTION = 1,
 	# CUSTOM ENUMS #############################################################
 	PLAYER_INPUT,
+	POWERUP_USED,
 	############################################################################
 	NUM_CLIENT_ENUMS,
 }
@@ -27,6 +28,7 @@ enum Server {
 	PLAYER_UPDATE,
 	BALL_UPDATE,
 	POWERUP_COLLECTED,
+	POWERUP_USED,
 	############################################################################
 }
 
@@ -108,6 +110,24 @@ static func create_server_powerup_collected_msg(collector: int, id: int) -> Pool
 	return to_bytes(data)
 
 
+static func create_client_powerup_used_msg(player_id: int) -> PoolByteArray:
+	var data := player_id
+	
+	data <<= SIZE_OF_MSG_TYPE
+	data |= Client.POWERUP_USED
+	
+	return to_bytes(data)
+
+
+static func create_server_powerup_used_msg(player_id: int) -> PoolByteArray:
+	var data := player_id
+	
+	data <<= SIZE_OF_MSG_TYPE
+	data |= Client.POWERUP_USED
+	
+	return to_bytes(data)
+
+
 ################################################################################
 
 
@@ -163,6 +183,13 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		
 		message["id"] = data & (1 << SIZE_OF_POWERUP_ID) - 1
 		data >>= SIZE_OF_POWERUP_ID
+	
+	elif msg_type == Client.POWERUP_USED:
+		message["player_id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
+		data >>= SIZE_OF_PLAYER_ID
+	elif msg_type == Server.POWERUP_USED:
+		message["player_id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
+		data >>= SIZE_OF_PLAYER_ID
 	############################################################################
 	
 	return message

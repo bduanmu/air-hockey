@@ -7,6 +7,7 @@ export (int, 0, 10000) var speed: int = 500
 var can_move: bool = false
 var last_server_time: int
 var direction: Vector2
+var powerup: PowerUp
 
 
 # Called when the node enters the scene tree for the first time.
@@ -43,6 +44,15 @@ func move(mouse_posn: Vector2) -> void:
 	else:
 		move_and_slide(direction * speed)
 	position = Vector2(int(position.x), int(position.y))
+
+
+func use_powerup() -> void:
+	if powerup == null:
+		return
+	
+	var msg = Protobuf.create_client_powerup_used_msg(local_id)
+	
+	Client.send_data_to_server(msg, Online.Send.RELIABLE)
 
 
 # Server receives input messages from Client and calls this function.

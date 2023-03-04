@@ -12,14 +12,17 @@ func _ready():
 
 
 func _on_body_entered(body):
-	if body is Player:
-		emit_signal("collected", body)
+	if body is Ball:
+		return
+	emit_signal("collected", body)
 
 
-func on_collected(player: Player) -> void:
-	print("collected")
+func on_collected() -> void:
 	hide()
-	monitoring = false
-	monitorable = false
-	player.powerup = self
+	set_deferred("monitoring",  false)
+	set_deferred("monitorable", false)
 	is_valid = true
+
+
+func use(player) -> void:
+	pass

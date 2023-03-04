@@ -25,5 +25,6 @@ func spawn_powerup(powerup: PowerUp, id: int) -> void:
 
 
 func on_powerup_collected(player: Player, id: int) -> void:
-	powerups[id].on_collected(player)
+	player.powerup = powerups[id]
+	powerups[id].on_collected()
 	powerups[id] = null #todo: start the timer to spawn new powerups if applicable

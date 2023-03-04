@@ -27,8 +27,10 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		Client.connect("ball_update_msg_received", self, "_on_ball_update_msg_received")
 	if !Client.is_connected("powerup_collected_msg_received", self, "_on_powerup_collected_msg_received"):
 		Client.connect("powerup_collected_msg_received", self, "_on_powerup_collected_msg_received")
-	if !Client.is_connected("player_powerup_used_msg_received", self, "_on_player_powerup_used_msg_received"):
-		Client.connect("player_powerup_used_msg_received", self, "_on_player_powerup_used_msg_received")
+	if !Server.is_connected("powerup_used_msg_received", self, "_on_powerup_used_msg_received"):
+		Server.connect("powerup_used_msg_received", self, "_on_powerup_used_msg_received")
+	if !Client.is_connected("powerup_used_msg_received", self, "_on_powerup_used_msg_received"):
+		Client.connect("powerup_used_msg_received", self, "_on_powerup_used_msg_received")
 	
 	# Initialize the map
 	map = lobby_data["map"]
@@ -64,10 +66,10 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	is_overtime = false
 	reset()
 	
-	spawn_powerup(preload("res://PowerUp.tscn").instance(), 0)
-	spawn_powerup(preload("res://PowerUp.tscn").instance(), 1)
-	spawn_powerup(preload("res://PowerUp.tscn").instance(), 3)
-	spawn_powerup(preload("res://PowerUp.tscn").instance(), 2)
+	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 0)
+	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 1)
+	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 3)
+	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 2)
 
 
 func reset() -> void:
@@ -107,11 +109,13 @@ func _on_powerup_collected(collector: Player, id: int) -> void:
 	Server.send_data_to_all_clients(msg, Online.Send.RELIABLE)
 
 
-func _on_player_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
+func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
 	if is_server:
 		if players[msg["player_id"]].powerup != null and players[msg["player_id"]].powerup.is_valid:
 			players[msg["player_id"]].powerup.is_valid = false
-			Server.send_data_to_all_clients(Prot, Online.Send.RELIABLE)
+			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"]), Online.Send.RELIABLE)
+	else:
+		players[msg["player_id"]].use_powerup()
 
 
 func on_goal_scored(side: int) -> void:

@@ -12,12 +12,11 @@ var powerup: PowerUp
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Sprite.scale *= ($CollisionShape2D.shape.radius * 2) / 256
-	$Sprite2.scale *= ($CollisionShape2D.shape.radius * 2) / 256
+	$"%Sprite".scale *= ($CollisionShape2D.shape.radius * 2) / 256
 	if local_id == 2:
-		$Sprite2.modulate = Color.red * 1.3
+		$"%InnerCircle".modulate = Color.red * 1.3
 	else:
-		$Sprite2.modulate = Color.blue * 1.3
+		$"%InnerCircle".modulate = Color.blue * 1.3
 	last_server_time = OS.get_system_time_msecs()
 
 
@@ -37,6 +36,12 @@ func _physics_process(delta: float) -> void:
 		move(mouse_position)
 
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("use_powerup"):
+		var msg := Protobuf.create_client_powerup_used_msg(local_id)
+		Client.send_data_to_server(msg, Online.Send.RELIABLE)
+
+
 func move(mouse_posn: Vector2) -> void:
 	direction = (mouse_posn - position).normalized()
 	if (position - mouse_posn).length_squared() <= pow(speed / 60, 2):
@@ -46,13 +51,9 @@ func move(mouse_posn: Vector2) -> void:
 	position = Vector2(int(position.x), int(position.y))
 
 
-func use_powerup() -> void:
-	if powerup == null:
-		return
-	
-	var msg = Protobuf.create_client_powerup_used_msg(local_id)
-	
-	Client.send_data_to_server(msg, Online.Send.RELIABLE)
+func use_powerup() -> void: #Validation complete
+	powerup.use(self)
+	powerup = null
 
 
 # Server receives input messages from Client and calls this function.

@@ -1,4 +1,4 @@
-extends RigidBody2D
+class_name Ball extends RigidBody2D
 
 
 export(int, 1, 100000) var max_speed

@@ -123,7 +123,7 @@ static func create_server_powerup_used_msg(player_id: int) -> PoolByteArray:
 	var data := player_id
 	
 	data <<= SIZE_OF_MSG_TYPE
-	data |= Client.POWERUP_USED
+	data |= Server.POWERUP_USED
 	
 	return to_bytes(data)
 

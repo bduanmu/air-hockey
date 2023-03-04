@@ -6,6 +6,7 @@ signal game_authenticated
 signal player_update_msg_received
 signal ball_update_msg_received
 signal powerup_collected_msg_received
+signal powerup_used_msg_received
 ################################################################################
 
 
@@ -77,6 +78,8 @@ func handle_custom_message(online_id: int, msg: Dictionary) -> void:
 		emit_signal("ball_update_msg_received", msg)
 	elif msg["type"] == Protobuf.Server.POWERUP_COLLECTED:
 		emit_signal("powerup_collected_msg_received", msg)
+	elif msg["type"] == Protobuf.Server.POWERUP_USED:
+		emit_signal("powerup_used_msg_received", msg, false)
 	
 
 

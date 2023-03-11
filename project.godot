@@ -74,10 +74,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Screens/SettingsScreen.gd"
 }, {
-"base": "PowerUp",
+"base": "TimerPowerUp",
 "class": "SizePowerUp",
 "language": "GDScript",
 "path": "res://PowerUps/SizePowerUp.gd"
+}, {
+"base": "PowerUp",
+"class": "TimerPowerUp",
+"language": "GDScript",
+"path": "res://TimerPowerUp.gd"
 } ]
 _global_script_class_icons={
 "Ball": "",
@@ -93,7 +98,8 @@ _global_script_class_icons={
 "Screen": "",
 "ScreenManager": "",
 "SettingsScreen": "",
-"SizePowerUp": ""
+"SizePowerUp": "",
+"TimerPowerUp": ""
 }
 
 [application]
@@ -148,6 +154,7 @@ use_powerup={
 
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Ball"
+2d_physics/layer_3="Power Up"
 
 [physics]
 

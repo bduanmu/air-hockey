@@ -4,6 +4,7 @@
 [ext_resource path="res://Circle.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
+resource_local_to_scene = true
 radius = 55.0
 
 [sub_resource type="Animation" id=3]
@@ -74,7 +75,7 @@ tracks/1/keys = {
 }
 
 [node name="Player" type="KinematicBody2D"]
-collision_mask = 3
+collision_mask = 7
 script = ExtResource( 1 )
 speed = 2000
 

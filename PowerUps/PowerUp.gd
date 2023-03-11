@@ -12,8 +12,6 @@ func _ready():
 
 
 func _on_body_entered(body):
-	if body is Ball:
-		return
 	emit_signal("collected", body)
 
 
@@ -25,4 +23,4 @@ func on_collected() -> void:
 
 
 func use(player) -> void:
-	pass
+	queue_free()

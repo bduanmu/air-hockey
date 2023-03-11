@@ -4,6 +4,7 @@ class_name GameScreen extends Screen
 signal quit_to_lobby
 
 
+var lobby_data: Dictionary
 var map: Map
 var scores: Array
 var players: Dictionary
@@ -15,6 +16,8 @@ var local_id: int
 
 
 func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_seed: int) -> void:
+	self.lobby_data = lobby_data
+	
 	rng = RandomNumberGenerator.new()
 	rng.seed = lobby_seed
 	
@@ -42,22 +45,12 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 #		players[player].queue_free()
 	players = {}
 	
-	for i in range(lobby_data["members"].size()):
-		var player = preload("res://Player.tscn").instance()
-		player.local_id = i + 1 # Use +1 because invalid can be 0.
-		player.online_id = lobby_data["members"][i].online_id
-		if player.online_id == Online.get_online_id():
-			player.is_local = true
-			local_id = i
-		map.add_child(player)
-		players[player.local_id] = player
-	
 	$"%Scoreboard".show()
 	$"%TimerLabel".text = "5:00"
 	$"%OvertimeLabel".modulate = Color.transparent
 	$"%Timer".start()
 	$"%Timer".set_paused(true)
-	time_remaining = 5 * 60 * 0 + 5
+	time_remaining = 5 * 60 * 0 + 20
 	
 	$"%LeftScore".text = "0"
 	$"%RightScore".text = "0"
@@ -75,6 +68,19 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 func reset() -> void:
 	if is_instance_valid(ball):
 		ball.queue_free()
+	
+	for player in players:
+		players[player].queue_free()
+	
+	for i in range(lobby_data["members"].size()):
+		var player = preload("res://Player.tscn").instance()
+		player.local_id = i + 1 # Use +1 because invalid can be 0.
+		player.online_id = lobby_data["members"][i].online_id
+		if player.online_id == Online.get_online_id():
+			player.is_local = true
+			local_id = i
+		map.add_child(player)
+		players[player.local_id] = player
 	
 	players[players.keys()[0]].position = Vector2(320, 820)
 	players[players.keys()[0]].get_node("Camera2D").reset_smoothing()

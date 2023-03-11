@@ -1,7 +1,7 @@
 class_name TimerPowerUp extends PowerUp
 
 
-export(int) var duration: float
+export(int) var duration: float = 5
 
 
 # Called when the node enters the scene tree for the first time.

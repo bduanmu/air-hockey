@@ -79,10 +79,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://PowerUps/SizePowerUp.gd"
 }, {
+"base": "TimerPowerUp",
+"class": "SpeedPowerUp",
+"language": "GDScript",
+"path": "res://PowerUps/SpeedPowerUp.gd"
+}, {
 "base": "PowerUp",
 "class": "TimerPowerUp",
 "language": "GDScript",
-"path": "res://TimerPowerUp.gd"
+"path": "res://PowerUps/TimerPowerUp.gd"
 } ]
 _global_script_class_icons={
 "Ball": "",
@@ -99,6 +104,7 @@ _global_script_class_icons={
 "ScreenManager": "",
 "SettingsScreen": "",
 "SizePowerUp": "",
+"SpeedPowerUp": "",
 "TimerPowerUp": ""
 }
 

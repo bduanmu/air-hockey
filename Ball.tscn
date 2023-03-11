@@ -65,7 +65,7 @@ continuous_cd = 2
 contacts_reported = 15
 contact_monitor = true
 script = ExtResource( 1 )
-max_speed = 2250
+max_speed = 1750
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )

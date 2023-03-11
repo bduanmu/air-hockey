@@ -37,6 +37,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if !is_local:
+		return
 	if event.is_action_pressed("use_powerup"):
 		var msg := Protobuf.create_client_powerup_used_msg(local_id)
 		Client.send_data_to_server(msg, Online.Send.RELIABLE)
@@ -74,7 +76,7 @@ func on_receive_input_update(mouse_posn: Vector2) -> void:
 # Client receives player updates from Server and calls this function.
 func on_receive_player_update(posn: Vector2) -> void:
 	# TODO: Check physics here!
-	if (position - posn).length_squared() >= 100:
+	if (position - posn).length_squared() >= 500:
 		position = posn
 	else:
 		position = lerp(position, posn, 0.1)

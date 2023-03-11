@@ -59,7 +59,7 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	is_overtime = false
 	reset()
 	
-	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 0)
+	spawn_powerup(preload("res://PowerUps/SpeedPowerUp.tscn").instance(), 0)
 	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 1)
 	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 3)
 	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 2)
@@ -122,6 +122,7 @@ func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
 			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"]), Online.Send.RELIABLE)
 	else:
 		players[msg["player_id"]].use_powerup()
+		print(msg["player_id"])
 
 
 func on_goal_scored(side: int) -> void:

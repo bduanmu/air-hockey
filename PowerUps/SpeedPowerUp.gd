@@ -13,11 +13,13 @@ func _ready():
 
 func use(player) -> void:
 	.use(player)
-	player.speed += 2000
+	player.max_speed += 200
+	player.accel_strength += 50
 
 
 func on_timeout(player) -> void:
 	if !is_instance_valid(player):
 		queue_free()
 		return
-	player.speed -= 2000
+	player.max_speed -= 200
+	player.accel_strength -= 50

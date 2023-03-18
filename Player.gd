@@ -1,7 +1,7 @@
 class_name Player extends OnlinePlayer
 
 
-export (int, 0, 10000) var max_speed: int = 500
+export (int, 0, 400) var max_speed: int = 200
 export (int) var accel_strength: int
 
 
@@ -59,7 +59,7 @@ func move(up: int, down: int, left: int, right: int, delta: float) -> void:
 	velocity = velocity.limit_length(max_speed)
 	move_and_slide(velocity)
 	
-	position = Vector2(int(position.x), int(position.y))
+#	position = Vector2(int(position.x), int(position.y))
 
 
 func use_powerup() -> void: #Validation complete
@@ -78,13 +78,14 @@ func on_receive_input_update(up: int, down: int, left: int, right: int) -> void:
 	last_server_time = now
 	
 	# I've calculated my position. Send it to all clients.
-	var msg := Protobuf.create_server_player_update_msg(local_id, position.x, position.y)
+	var msg := Protobuf.create_server_player_update_msg(local_id, position.x, position.y, velocity.x + 2048, velocity.y + 2048)
 	Server.send_data_to_all_clients(msg, Online.Send.UNRELIABLE)
 
 
 # Client receives player updates from Server and calls this function.
-func on_receive_player_update(posn: Vector2) -> void:
+func on_receive_player_update(posn: Vector2, velocity: Vector2) -> void:
 	# TODO: Check physics here!
+	self.velocity = velocity
 	if (position - posn).length_squared() >= 9:
 		position = posn
 	else:

@@ -63,8 +63,14 @@ static func create_client_input_msg(id: int, direction: int) -> PoolByteArray:
 	return to_bytes(data)
 
 
-static func create_server_player_update_msg(id: int, posn_x: int, posn_y: int) -> PoolByteArray:
-	var data := posn_y
+static func create_server_player_update_msg(id: int, posn_x: int, posn_y: int, vel_x: int, vel_y: int) -> PoolByteArray:
+	var data := vel_y
+	
+	data <<= SIZE_OF_VELOCITY
+	data |= vel_x
+	
+	data <<= SIZE_OF_POSITION
+	data |= posn_y
 	
 	data <<= SIZE_OF_POSITION
 	data |= posn_x
@@ -158,6 +164,12 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		
 		message["posn_y"] = data & (1 << SIZE_OF_POSITION) - 1
 		data >>= SIZE_OF_POSITION
+		
+		message["vel_x"] = data & (1 << SIZE_OF_VELOCITY) - 1
+		data >>= SIZE_OF_VELOCITY
+		
+		message["vel_y"] = data & (1 << SIZE_OF_VELOCITY) - 1
+		data >>= SIZE_OF_VELOCITY
 	
 	elif msg_type == Server.BALL_UPDATE:
 		message["posn_x"] = data & (1 << SIZE_OF_POSITION) - 1

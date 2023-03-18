@@ -174,7 +174,7 @@ func _on_player_input_msg_received(msg: Dictionary) -> void:
 
 func _on_player_update_msg_received(msg: Dictionary) -> void:
 	if is_instance_valid(players[msg["id"]]):
-		players[msg["id"]].on_receive_player_update(Vector2(msg["posn_x"], msg["posn_y"]))
+		players[msg["id"]].on_receive_player_update(Vector2(msg["posn_x"], msg["posn_y"]), Vector2(msg["vel_x"] - 2048, msg["vel_y"] - 2048))
 
 
 func _on_ball_update_msg_received(msg: Dictionary) -> void:

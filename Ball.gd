@@ -53,7 +53,7 @@ func on_receive_ball_update(posn: Vector2, velocity: Vector2) -> void:
 
 
 func _on_body_entered(body: Node) -> void:
-	var velocity = Vector2(0, 0)
-	if body is KinematicBody2D:
-		velocity = body.direction
+#	var velocity = Vector2(0, 0)
+#	if body is KinematicBody2D:
+#		velocity = body.direction
 	$Sprite.modulate = Color.white * min(1.3, 1)

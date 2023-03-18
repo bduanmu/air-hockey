@@ -169,7 +169,7 @@ func _quit_to_lobby() -> void:
 
 func _on_player_input_msg_received(msg: Dictionary) -> void:
 	if is_instance_valid(players[msg["id"]]):
-		players[msg["id"]].on_receive_input_update(Vector2(msg["posn_x"], msg["posn_y"]))
+		players[msg["id"]].on_receive_input_update(msg["direction"] & 8, msg["direction"] & 4, msg["direction"] & 2, msg["direction"] & 1)
 
 
 func _on_player_update_msg_received(msg: Dictionary) -> void:

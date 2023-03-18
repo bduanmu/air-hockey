@@ -7,6 +7,7 @@ const SIZE_OF_MSG_TYPE := 5 # 32
 # CUSTOM DATA ##################################################################
 const SIZE_OF_PLAYER_ID := 2 # 4
 const SIZE_OF_POSITION := 12 # 4096
+const SIZE_OF_DIRECTION := 4 # up, down, left, right
 const SIZE_OF_VELOCITY := 12
 const SIZE_OF_POWERUP_ID := 2
 ################################################################################
@@ -50,11 +51,8 @@ static func create_simple_msg(msg_type: int) -> PoolByteArray:
 # ADD CUSTOM MESSAGE INITIALIZERS AS REQUIRED ##################################
 
 
-static func create_client_input_msg(id: int, mouse_posn_x: int, mouse_posn_y: int) -> PoolByteArray:
-	var data := mouse_posn_y
-	
-	data <<= SIZE_OF_POSITION
-	data |= mouse_posn_x
+static func create_client_input_msg(id: int, direction: int) -> PoolByteArray:
+	var data := direction
 	
 	data <<= SIZE_OF_PLAYER_ID
 	data |= id
@@ -148,11 +146,8 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		message["id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
 		data >>= SIZE_OF_PLAYER_ID
 		
-		message["posn_x"] = data & (1 << SIZE_OF_POSITION) - 1
-		data >>= SIZE_OF_POSITION
-		
-		message["posn_y"] = data & (1 << SIZE_OF_POSITION) - 1
-		data >>= SIZE_OF_POSITION
+		message["direction"] = data & (1 << SIZE_OF_DIRECTION) - 1
+		data >>= SIZE_OF_DIRECTION
 	
 	elif msg_type == Server.PLAYER_UPDATE:
 		message["id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1

@@ -77,7 +77,8 @@ tracks/1/keys = {
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 7
 script = ExtResource( 1 )
-speed = 1000
+max_speed = 200
+accel_strength = 200
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true

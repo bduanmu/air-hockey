@@ -21,6 +21,17 @@ func _ready() -> void:
 	last_server_time = OS.get_system_time_msecs()
 
 
+func _input(event: InputEvent) -> void:
+	if !is_local:
+		return
+	if event.is_action_pressed("use_powerup"):
+		var msg := Protobuf.create_client_powerup_used_msg(local_id)
+		Client.send_data_to_server(msg, Online.Send.RELIABLE)
+	elif event.is_action_released("shoot"):
+		var msg := Protobuf.create_client_shot_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
+		Client.send_data_to_server(msg, Online.Send.RELIABLE)
+
+
 func _physics_process(delta: float) -> void:
 	if !is_local or !can_move or !OS.is_window_focused():
 		return
@@ -42,16 +53,10 @@ func _physics_process(delta: float) -> void:
 		move(up, down, left, right, delta)
 
 
-func _input(event: InputEvent) -> void:
-	if !is_local:
-		return
-	if event.is_action_pressed("use_powerup"):
-		var msg := Protobuf.create_client_powerup_used_msg(local_id)
-		Client.send_data_to_server(msg, Online.Send.RELIABLE)
-
-
 func move(up: int, down: int, left: int, right: int, delta: float) -> void:
 	velocity += Vector2(right - left, down - up).normalized() * accel_strength * delta
+	var friction: Vector2 = - velocity.normalized() * 25 * delta
+	velocity += friction
 #	if (position - mouse_posn).length_squared() <= pow(speed / 60, 2):
 #		move_and_slide((mouse_posn - position) * 60)
 #	else:
@@ -60,6 +65,14 @@ func move(up: int, down: int, left: int, right: int, delta: float) -> void:
 	move_and_slide(velocity)
 	
 #	position = Vector2(int(position.x), int(position.y))
+
+
+func is_shot_on_cooldown() -> bool:
+	return false
+
+
+func start_shot_cooldown() -> void:
+	pass
 
 
 func use_powerup() -> void: #Validation complete
@@ -85,7 +98,7 @@ func on_receive_input_update(up: int, down: int, left: int, right: int) -> void:
 # Client receives player updates from Server and calls this function.
 func on_receive_player_update(posn: Vector2, velocity: Vector2) -> void:
 	# TODO: Check physics here!
-	self.velocity = velocity
+#	self.velocity = velocity
 	if (position - posn).length_squared() >= 9:
 		position = posn
 	else:

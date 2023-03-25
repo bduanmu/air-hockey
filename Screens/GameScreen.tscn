@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Screens/GameScreen.gd" type="Script" id=1]
 [ext_resource path="res://Theme/RabbidHighwaySignII.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://Projectile.tscn" type="PackedScene" id=3]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -23,6 +24,7 @@ font_data = ExtResource( 2 )
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 1 )
+projectile_scene = ExtResource( 3 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )

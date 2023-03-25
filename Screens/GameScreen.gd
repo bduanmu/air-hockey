@@ -4,6 +4,9 @@ class_name GameScreen extends Screen
 signal quit_to_lobby
 
 
+export (PackedScene) var projectile_scene: PackedScene
+
+
 var lobby_data: Dictionary
 var map: Map
 var scores: Array
@@ -26,6 +29,10 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		Server.connect("player_input_msg_received", self, "_on_player_input_msg_received")
 	if !Client.is_connected("player_update_msg_received", self, "_on_player_update_msg_received"):
 		Client.connect("player_update_msg_received", self, "_on_player_update_msg_received")
+	if !Server.is_connected("shot_msg_received", self, "_on_shot_msg_received"):
+		Server.connect("shot_msg_received", self, "_on_shot_msg_received")
+	if !Client.is_connected("shot_msg_received", self, "_on_shot_msg_received"):
+		Client.connect("shot_msg_received", self, "shoot")
 	if !Client.is_connected("ball_update_msg_received", self, "_on_ball_update_msg_received"):
 		Client.connect("ball_update_msg_received", self, "_on_ball_update_msg_received")
 	if !Client.is_connected("powerup_collected_msg_received", self, "_on_powerup_collected_msg_received"):
@@ -104,6 +111,14 @@ func reset() -> void:
 	map.add_child(ball)
 
 
+func shoot(msg: Dictionary) -> void:
+	var projectile: Projectile = projectile_scene.instance()
+	projectile.position = players[msg["id"]].position
+	projectile.linear_velocity = (Vector2(msg["mouse_x"], msg["mouse_y"]) - players[msg["id"]].position).normalized() * projectile.speed
+	add_child(projectile)
+	#todo: free on reset and on collision and when the life runs out
+
+
 func spawn_powerup(powerup: PowerUp, id: int) -> void:
 	map.spawn_powerup(powerup, id)
 	if Client.i_am_server():
@@ -114,15 +129,6 @@ func _on_powerup_collected(collector: Player, id: int) -> void:
 	var msg := Protobuf.create_server_powerup_collected_msg(collector.local_id, id)
 	Server.send_data_to_all_clients(msg, Online.Send.RELIABLE)
 
-
-func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
-	if is_server:
-		if players[msg["player_id"]].powerup != null and players[msg["player_id"]].powerup.is_valid:
-			players[msg["player_id"]].powerup.is_valid = false
-			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"]), Online.Send.RELIABLE)
-	else:
-		players[msg["player_id"]].use_powerup()
-		print(msg["player_id"])
 
 
 func on_goal_scored(side: int) -> void:
@@ -177,6 +183,15 @@ func _on_player_update_msg_received(msg: Dictionary) -> void:
 		players[msg["id"]].on_receive_player_update(Vector2(msg["posn_x"], msg["posn_y"]), Vector2(msg["vel_x"] - 2048, msg["vel_y"] - 2048))
 
 
+func _on_shot_msg_received(msg: Dictionary) -> void:
+	if is_instance_valid(players[msg["id"]]):
+		if players[msg["id"]].is_shot_on_cooldown():
+			return
+		players[msg["id"]].start_shot_cooldown()
+		var client_msg = Protobuf.create_server_shot_msg(msg["id"], msg["mouse_x"], msg["mouse_y"])
+		Server.send_data_to_all_clients(client_msg, Online.Send.RELIABLE)
+
+
 func _on_ball_update_msg_received(msg: Dictionary) -> void:
 	if is_instance_valid(ball):
 		ball.on_receive_ball_update(Vector2(msg["posn_x"], msg["posn_y"]), Vector2(msg["vel_x"] - ball.max_speed, msg["vel_y"] - ball.max_speed))
@@ -184,3 +199,13 @@ func _on_ball_update_msg_received(msg: Dictionary) -> void:
 
 func _on_powerup_collected_msg_received(msg: Dictionary) -> void:
 	map.on_powerup_collected(players[msg["collector"]], msg["id"])
+
+
+func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
+	if is_server:
+		if players[msg["player_id"]].powerup != null and players[msg["player_id"]].powerup.is_valid:
+			players[msg["player_id"]].powerup.is_valid = false
+			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"]), Online.Send.RELIABLE)
+	else:
+		players[msg["player_id"]].use_powerup()
+		print(msg["player_id"])

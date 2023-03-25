@@ -18,6 +18,7 @@ enum Client {
 	# CUSTOM ENUMS #############################################################
 	PLAYER_INPUT,
 	POWERUP_USED,
+	SHOT,
 	############################################################################
 	NUM_CLIENT_ENUMS,
 }
@@ -30,6 +31,7 @@ enum Server {
 	BALL_UPDATE,
 	POWERUP_COLLECTED,
 	POWERUP_USED,
+	SHOT,
 	############################################################################
 }
 
@@ -102,6 +104,36 @@ static func create_server_ball_update_msg(posn_x: int, posn_y: int, vel_x: int, 
 	return to_bytes(data)
 
 
+static func create_client_shot_msg(id: int, mouse_x: int, mouse_y: int) -> PoolByteArray:
+	var data := mouse_y
+	
+	data <<= SIZE_OF_POSITION
+	data |= mouse_x
+	
+	data <<= SIZE_OF_PLAYER_ID
+	data |= id
+	
+	data <<= SIZE_OF_MSG_TYPE
+	data |= Client.SHOT
+	
+	return to_bytes(data)
+
+
+static func create_server_shot_msg(id: int, mouse_x: int, mouse_y: int) -> PoolByteArray:
+	var data := mouse_y
+	
+	data <<= SIZE_OF_POSITION
+	data |= mouse_x
+	
+	data <<= SIZE_OF_PLAYER_ID
+	data |= id
+	
+	data <<= SIZE_OF_MSG_TYPE
+	data |= Server.SHOT
+	
+	return to_bytes(data)
+
+
 static func create_server_powerup_collected_msg(collector: int, id: int) -> PoolByteArray:
 	var data := id
 	
@@ -170,6 +202,16 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		
 		message["vel_y"] = data & (1 << SIZE_OF_VELOCITY) - 1
 		data >>= SIZE_OF_VELOCITY
+	
+	elif msg_type == Client.SHOT or msg_type == Server.SHOT:
+		message["id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
+		data >>= SIZE_OF_PLAYER_ID
+		
+		message["mouse_x"] = data & (1 << SIZE_OF_POSITION) - 1
+		data >>= SIZE_OF_POSITION
+		
+		message["mouse_y"] = data & (1 << SIZE_OF_POSITION) - 1
+		data >>= SIZE_OF_POSITION
 	
 	elif msg_type == Server.BALL_UPDATE:
 		message["posn_x"] = data & (1 << SIZE_OF_POSITION) - 1

@@ -175,6 +175,8 @@ func _quit_to_lobby() -> void:
 
 func _on_player_input_msg_received(msg: Dictionary) -> void:
 	if is_instance_valid(players[msg["id"]]):
+		if !players[msg["id"]].can_move:
+			return
 		players[msg["id"]].on_receive_input_update((msg["direction"] & 8) >> 3, (msg["direction"] & 4) >> 2, (msg["direction"] & 2) >> 1, msg["direction"] & 1)
 
 
@@ -185,7 +187,7 @@ func _on_player_update_msg_received(msg: Dictionary) -> void:
 
 func _on_shot_msg_received(msg: Dictionary) -> void:
 	if is_instance_valid(players[msg["id"]]):
-		if players[msg["id"]].is_shot_on_cooldown():
+		if players[msg["id"]].is_shot_on_cooldown() or !players[msg["id"]].can_move:
 			return
 		players[msg["id"]].start_shot_cooldown()
 		var client_msg = Protobuf.create_server_shot_msg(msg["id"], msg["mouse_x"], msg["mouse_y"])
@@ -203,6 +205,8 @@ func _on_powerup_collected_msg_received(msg: Dictionary) -> void:
 
 func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
 	if is_server:
+		if !players[msg["id"]].can_move:
+			return
 		if players[msg["player_id"]].powerup != null and players[msg["player_id"]].powerup.is_valid:
 			players[msg["player_id"]].powerup.is_valid = false
 			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"]), Online.Send.RELIABLE)

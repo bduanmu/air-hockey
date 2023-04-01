@@ -33,7 +33,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if !is_local or !can_move or !OS.is_window_focused():
+	if !is_local or !OS.is_window_focused():
 		return
 	
 	var up := 1 if Input.is_action_pressed("move_up") else 0

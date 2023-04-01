@@ -205,11 +205,10 @@ func _on_powerup_collected_msg_received(msg: Dictionary) -> void:
 
 func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
 	if is_server:
-		if !players[msg["id"]].can_move:
+		if !players[msg["player_id"]].can_move:
 			return
 		if players[msg["player_id"]].powerup != null and players[msg["player_id"]].powerup.is_valid:
 			players[msg["player_id"]].powerup.is_valid = false
 			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"]), Online.Send.RELIABLE)
 	else:
 		players[msg["player_id"]].use_powerup()
-		print(msg["player_id"])

@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 	var msg := Protobuf.create_client_input_msg(local_id, up << 3 | down << 2 | left << 1 | right)
 	Client.send_data_to_server(msg, Online.Send.UNRELIABLE)
 	
-	if !Client.i_am_server():
+	if !Client.i_am_server() and can_move:
 		move(up, down, left, right, delta)
 
 

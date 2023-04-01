@@ -1,23 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Screens/ScreenManager.gd" type="Script" id=1]
-[ext_resource path="res://Screens/SettingsScreen.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Screens/StartScreen.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Screens/LobbyScreen.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Screens/GameScreen.tscn" type="PackedScene" id=5]
 
 [node name="ScreenManager" type="Node"]
 script = ExtResource( 1 )
 
 [node name="StartScreen" parent="." instance=ExtResource( 3 )]
-
-[node name="SettingsScreen" parent="." instance=ExtResource( 2 )]
-visible = false
-
-[node name="LobbyScreen" parent="." instance=ExtResource( 4 )]
-visible = false
-
-[node name="GameScreen" parent="." instance=ExtResource( 5 )]
-visible = false
-
-[connection signal="start_game" from="LobbyScreen" to="GameScreen" method="create_new_game"]

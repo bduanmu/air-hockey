@@ -1,16 +1,6 @@
 extends Screen
 
 
-func _on_settings_button_pressed() -> void:
-	get_parent().transition(ScreenManager.Screens.SETTINGS)
-
-
-func _on_play_button_pressed() -> void:
-	Online.create_lobby(Online.LobbyType.PUBLIC, 8)
-	Client.set_game_state(Client.GameState.CREATING_LOBBY)
-	get_parent().transition(ScreenManager.Screens.LOBBY)
-
-
 func _on_quit_button_pressed() -> void:
 	$Popup.popup_centered()
 
@@ -21,3 +11,8 @@ func _on_confirm_quit_button_pressed() -> void:
 
 func _on_cancel_quit_button_pressed() -> void:
 	$Popup.hide()
+
+
+func connect_signals(node: Node) -> void:
+	$"%PlayButton".connect("pressed", node, "_on_play_button_pressed")
+	$"%SettingsButton".connect("pressed", node, "_on_settings_button_pressed")

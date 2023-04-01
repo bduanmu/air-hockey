@@ -171,7 +171,7 @@ func _quit_to_lobby() -> void:
 	$"%Scoreboard".hide()
 	map.queue_free()
 	get_tree().paused = false
-	get_parent().transition(ScreenManager.Screens.LOBBY)
+	get_parent().transition(Screens.LOBBY)
 
 func _on_player_input_msg_received(msg: Dictionary) -> void:
 	if is_instance_valid(players[msg["id"]]):

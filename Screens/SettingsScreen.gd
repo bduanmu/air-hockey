@@ -13,6 +13,10 @@ func _ready() -> void:
 	load_settings()
 
 
+func connect_signals(node: Node) -> void:
+	$"%BackButton".connect("pressed", node, "to_start_screen")
+
+
 func _on_screen_type_changed(state: int) -> void:
 	if state == ScreenMode.FULLSCREEN:
 		OS.window_borderless = false
@@ -49,7 +53,6 @@ func load_settings() -> void:
 
 func _on_back_button_pressed() -> void:
 	save()
-	get_parent().transition(ScreenManager.Screens.START)
 
 
 func _on_master_volume_changed(volume: int) -> void:

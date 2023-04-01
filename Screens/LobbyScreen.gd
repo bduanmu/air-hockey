@@ -32,6 +32,10 @@ func _connect_signals() -> void:
 # FUNCTIONS ####################################################################
 
 
+func connect_signals(node: Node) -> void:
+	connect("start_game", node, "_on_game_started")
+
+
 func _update_lobby() -> void:
 	var num_members := Online.get_num_lobby_members(lobby_id)
 	if Online.get_lobby_owner(lobby_id) == Online.get_online_id():
@@ -81,7 +85,7 @@ func _on_back_button_pressed() -> void:
 	self.lobby_id = 0
 	_lobby_chat.text = ""
 	emit_signal("back_button_pressed")
-	get_parent().transition(ScreenManager.Screens.START)
+	get_parent().transition(Screens.START)
 
 
 # I entered the lobby.
@@ -102,6 +106,7 @@ func _on_lobby_chat_update(_lobby_id: int, changed_id: int, chat_state: int) -> 
 
 func _on_lobby_data_update(_lobby_id: int, member_id: int) -> void:
 	_update_lobby()
+	print(lobby_id,"hwkbafj")
 	if lobby_id == member_id: # The lobby made the change
 		var lobby_seed := Online.get_lobby_data(lobby_id, "game_starting")
 		if lobby_seed != "":

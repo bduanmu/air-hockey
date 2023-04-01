@@ -179,6 +179,7 @@ margin_right = 625.0
 margin_bottom = 79.0
 
 [node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
 margin_right = 218.0
 margin_bottom = 79.0
 text = "Back"

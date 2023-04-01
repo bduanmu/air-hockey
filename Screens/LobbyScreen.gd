@@ -5,6 +5,7 @@ signal start_game
 
 
 var lobby_id: int setget set_lobby_id
+var game_starting: bool
 
 
 onready var lobby_members := $"%LobbyMemberContainer".get_children()
@@ -33,6 +34,10 @@ func _connect_signals() -> void:
 
 func _update_lobby() -> void:
 	var num_members := Online.get_num_lobby_members(lobby_id)
+	if Online.get_lobby_owner(lobby_id) == Online.get_online_id():
+		$"%PlayButton".disabled = false
+	else:
+		$"%PlayButton".disabled = true
 	for i in range(Online.MAX_PLAYERS):
 		if i < num_members:
 			lobby_members[i].online_id = Online.get_lobby_member_by_index(lobby_id, i)
@@ -62,6 +67,9 @@ func _create_lobby_data() -> Dictionary:
 
 
 func _on_play_button_pressed() -> void:
+	if game_starting:
+		return
+	game_starting = true
 	var lobby_seed := randi()
 	Online.set_lobby_data(lobby_id, "game_starting", str(lobby_seed))
 	if Online.API == Online.NONE: # Offline mode
@@ -98,6 +106,7 @@ func _on_lobby_data_update(_lobby_id: int, member_id: int) -> void:
 		var lobby_seed := Online.get_lobby_data(lobby_id, "game_starting")
 		if lobby_seed != "":
 			hide()
+			game_starting = false
 			var host_id := Online.get_lobby_owner(lobby_id)
 			emit_signal("start_game", _create_lobby_data(), lobby_id, host_id, int(lobby_seed))
 	else:

@@ -109,3 +109,7 @@ shape = SubResource( 1 )
 unique_name_in_owner = true
 anims/RESET = SubResource( 3 )
 anims/grow = SubResource( 2 )
+
+[node name="ShotTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true

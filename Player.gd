@@ -19,6 +19,7 @@ func _ready() -> void:
 	else:
 		$"%InnerCircle".modulate = Color.blue * 1.3
 	last_server_time = OS.get_system_time_msecs()
+	$"%ShotTimer".connect("timeout", self, "_on_shot_timer_timeout")
 
 
 func _input(event: InputEvent) -> void:
@@ -30,6 +31,7 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_released("shoot"):
 		var msg := Protobuf.create_client_shot_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
 		Client.send_data_to_server(msg, Online.Send.RELIABLE)
+		start_shot_cooldown()
 
 
 func _physics_process(delta: float) -> void:
@@ -68,11 +70,19 @@ func move(up: int, down: int, left: int, right: int, delta: float) -> void:
 
 
 func is_shot_on_cooldown() -> bool:
-	return false
+	print(!$"%ShotTimer".is_stopped())
+	return !$"%ShotTimer".is_stopped()
 
 
 func start_shot_cooldown() -> void:
+	if !is_shot_on_cooldown():
+		$"%ShotTimer".start()
+		#shot is unavailable
+
+
+func _on_shot_timer_timeout() -> void:
 	pass
+	#shot is available
 
 
 func use_powerup() -> void: #Validation complete

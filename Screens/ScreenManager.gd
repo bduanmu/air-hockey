@@ -36,7 +36,8 @@ func to_start_screen() -> void:
 
 
 func _on_game_authenticated(lobby_seed: int) -> void:
-	transition(Screen.Screens.GAME)
+#	transition(Screen.Screens.GAME)
+	pass
 
 
 func _on_game_started(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_seed: int) -> void:

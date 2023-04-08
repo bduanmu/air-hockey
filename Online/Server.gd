@@ -66,7 +66,6 @@ func send_data_to_client(online_id: int, msg: PoolByteArray, flags: int) -> void
 		var result := Online.send_message_to_user(online_id, msg, flags, Online.Channel.CLIENT)
 		if result != Online.Result.OK:
 			print_debug("Failed sending data to client: ", result)
-			print(online_id)
 
 
 # Specify exclude_sender if I don't want to send message to sender
@@ -74,7 +73,6 @@ func send_data_to_all_clients(msg: PoolByteArray, flags: int, exclude_sender := 
 	for lobby_member in Client.lobby_members:
 		if lobby_member.online_id != exclude_sender:
 			send_data_to_client(lobby_member.online_id, msg, flags)
-			print(lobby_member.online_id, " a")
 
 
 # CALLBACKS ####################################################################

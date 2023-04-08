@@ -21,7 +21,6 @@ func _ready() -> void:
 
 
 func _connect_signals() -> void:
-	Online.connect("lobby_entered", self, "_on_lobby_entered")
 	Online.connect("lobby_data_update", self, "_on_lobby_data_update")
 	Online.connect("lobby_chat_update", self, "_on_lobby_chat_update")
 	Online.connect("lobby_message", self, "_on_lobby_message")
@@ -62,7 +61,6 @@ func _create_lobby_data() -> Dictionary:
 		member.member_name = lobby_members[i].member_name
 		member.connected = lobby_members[i].connected
 		members.append(member)
-		print(lobby_members[i].online_id)
 	
 	var lobby_data: Dictionary = {
 		"map": preload("res://Maps/Map.tscn").instance(),

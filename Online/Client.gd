@@ -159,6 +159,8 @@ func _on_lobby_join_requested(lobby_id: int, _friend_id: int) -> void:
 
 
 func _on_game_started(lobby_data: Dictionary, _lobby_id: int, host_id: int, lobby_seed: int) -> void:
+	for member in lobby_members:
+		member.queue_free()
 	self.lobby_members = lobby_data["members"]
 	self.lobby_seed = lobby_seed
 	for member in lobby_members:
@@ -195,3 +197,9 @@ func _on_game_started(lobby_data: Dictionary, _lobby_id: int, host_id: int, lobb
 #func on_receive_server_full_response() -> void:
 #	set_game_state(GameState.CONNECTION_FAILURE)
 #	disconnect_from_server()
+
+
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		for member in lobby_members:
+			member.free()

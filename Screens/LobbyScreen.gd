@@ -57,7 +57,12 @@ func _create_lobby_data() -> Dictionary:
 	var members = []
 	var num_members := Online.get_num_lobby_members(lobby_id)
 	for i in range(num_members):
-		members.append(lobby_members[i])
+		var member = lobby_members[i].duplicate()
+		member.online_id = lobby_members[i].online_id
+		member.member_name = lobby_members[i].member_name
+		member.connected = lobby_members[i].connected
+		members.append(member)
+		print(lobby_members[i].online_id)
 	
 	var lobby_data: Dictionary = {
 		"map": preload("res://Maps/Map.tscn").instance(),
@@ -84,7 +89,7 @@ func _on_back_button_pressed() -> void:
 	Online.leave_lobby(lobby_id)
 	self.lobby_id = 0
 	_lobby_chat.text = ""
-	emit_signal("back_button_pressed")
+#	emit_signal("back_button_pressed")
 	get_parent().transition(Screens.START)
 
 
@@ -106,7 +111,6 @@ func _on_lobby_chat_update(_lobby_id: int, changed_id: int, chat_state: int) -> 
 
 func _on_lobby_data_update(_lobby_id: int, member_id: int) -> void:
 	_update_lobby()
-	print(lobby_id,"hwkbafj")
 	if lobby_id == member_id: # The lobby made the change
 		var lobby_seed := Online.get_lobby_data(lobby_id, "game_starting")
 		if lobby_seed != "":

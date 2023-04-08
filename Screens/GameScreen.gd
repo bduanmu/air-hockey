@@ -113,9 +113,13 @@ func reset() -> void:
 
 func shoot(msg: Dictionary) -> void:
 	players[msg["id"]].start_shot_cooldown()
+	
+	var direction: Vector2 = (Vector2(msg["mouse_x"], msg["mouse_y"]) - players[msg["id"]].position).normalized()
+	players[msg["id"]].recoil(-direction)
+	
 	var projectile: Projectile = projectile_scene.instance()
 	projectile.position = players[msg["id"]].position
-	projectile.linear_velocity = (Vector2(msg["mouse_x"], msg["mouse_y"]) - players[msg["id"]].position).normalized() * projectile.speed
+	projectile.linear_velocity = direction * projectile.speed
 	add_child(projectile)
 
 

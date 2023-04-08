@@ -3,6 +3,7 @@ class_name Player extends OnlinePlayer
 
 export (int, 0, 400) var max_speed: int = 200
 export (int) var accel_strength: int
+export (int) var recoil_strength: int = 500
 
 
 var can_move: bool = false
@@ -63,8 +64,11 @@ func move(up: int, down: int, left: int, right: int, delta: float) -> void:
 #		move_and_slide((mouse_posn - position) * 60)
 #	else:
 #		move_and_slide(direction * speed)
-	velocity = velocity.limit_length(max_speed)
+	if velocity.length_squared() > max_speed * max_speed:
+		velocity = velocity.move_toward(velocity.limit_length(max_speed), accel_strength * delta)
 	move_and_slide(velocity)
+	
+	#todo: when player hits wall removen velocity perpendicular to wall to stop player from "sticking"
 	
 #	position = Vector2(int(position.x), int(position.y))
 
@@ -83,6 +87,10 @@ func start_shot_cooldown() -> void:
 func _on_shot_timer_timeout() -> void:
 	pass
 	#shot is available
+
+
+func recoil(direction: Vector2) -> void:
+	velocity += direction * recoil_strength
 
 
 func use_powerup() -> void: #Validation complete

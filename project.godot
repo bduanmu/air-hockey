@@ -129,6 +129,7 @@ default_bus_layout=""
 Client="*res://Online/Client.gd"
 Online="*res://Online/Online.gd"
 Server="*res://Online/Server.gd"
+Global="*res://Global.gd"
 
 [debug]
 

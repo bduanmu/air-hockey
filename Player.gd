@@ -68,7 +68,10 @@ func move(up: int, down: int, left: int, right: int, delta: float) -> void:
 		velocity = velocity.move_toward(velocity.limit_length(max_speed), accel_strength * delta)
 	move_and_slide(velocity)
 	
-	#todo: when player hits wall removen velocity perpendicular to wall to stop player from "sticking"
+	for i in range(get_slide_count()):
+		var collision = get_slide_collision(i)
+		if collision.collider.collision_layer & Global.Layer.WALL:
+			velocity = velocity.slide(collision.normal)
 	
 #	position = Vector2(int(position.x), int(position.y))
 

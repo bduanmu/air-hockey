@@ -9,6 +9,12 @@ enum Layer {
 }
 
 
+var power_ups: Array = [
+	preload("res://PowerUps/SizePowerUp.tscn"),
+	preload("res://PowerUps/SpeedPowerUp.tscn"),
+]
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.

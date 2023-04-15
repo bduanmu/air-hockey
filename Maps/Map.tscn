@@ -33,6 +33,7 @@ __meta__ = {
 }
 
 [node name="Walls" type="StaticBody2D" parent="."]
+position = Vector2( 0, 4 )
 collision_layer = 8
 collision_mask = 3
 __meta__ = {
@@ -128,6 +129,7 @@ __meta__ = {
 }
 
 [node name="GoalLeft" type="Area2D" parent="."]
+position = Vector2( 0, 4 )
 collision_layer = 0
 collision_mask = 2
 __meta__ = {
@@ -140,7 +142,7 @@ position = Vector2( 20, 820 )
 shape = SubResource( 5 )
 
 [node name="GoalRight" type="Area2D" parent="."]
-position = Vector2( 2520, 0 )
+position = Vector2( 2520, 4 )
 collision_layer = 0
 collision_mask = 2
 __meta__ = {
@@ -156,16 +158,16 @@ shape = SubResource( 5 )
 unique_name_in_owner = true
 
 [node name="PowerUp0" type="Position2D" parent="PowerUpLocations"]
-position = Vector2( 2008, 461 )
+position = Vector2( 370, 1184 )
 
 [node name="PowerUp1" type="Position2D" parent="PowerUpLocations"]
-position = Vector2( 1208, 521 )
+position = Vector2( 1280, 464 )
 
 [node name="PowerUp2" type="Position2D" parent="PowerUpLocations"]
-position = Vector2( 623, 1088 )
+position = Vector2( 1280, 1184 )
 
 [node name="PowerUp3" type="Position2D" parent="PowerUpLocations"]
-position = Vector2( 1477, 971 )
+position = Vector2( 2190, 464 )
 
 [connection signal="body_entered" from="GoalLeft" to="." method="_on_goal_scored" binds= [ 0 ]]
 [connection signal="body_entered" from="GoalRight" to="." method="_on_goal_scored" binds= [ 1 ]]

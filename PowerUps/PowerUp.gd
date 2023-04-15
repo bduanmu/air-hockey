@@ -1,9 +1,22 @@
 class_name PowerUp extends Area2D
 
 
+enum Type {
+	SIZE, 
+	SPEED,
+	
+	#COUNT is the amount of power ups
+	COUNT,
+}
+
+
 signal collected
 
+
+export(Type) var type: int
+
 var is_valid: bool
+var index: int
 
 
 # Called when the node enters the scene tree for the first time.

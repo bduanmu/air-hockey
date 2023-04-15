@@ -77,7 +77,6 @@ func move(up: int, down: int, left: int, right: int, delta: float) -> void:
 
 
 func is_shot_on_cooldown() -> bool:
-	print(!$"%ShotTimer".is_stopped())
 	return !$"%ShotTimer".is_stopped()
 
 

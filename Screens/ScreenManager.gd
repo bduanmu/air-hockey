@@ -28,7 +28,6 @@ func transition(next_screen_index: int) -> void:
 	current_screen.connect_signals(self)
 	if next_screen_index == Screen.Screens.LOBBY:
 		current_screen._on_lobby_entered(lobby_id)
-	print(next_screen_index)
 
 
 func to_start_screen() -> void:

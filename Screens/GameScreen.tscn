@@ -38,6 +38,9 @@ unique_name_in_owner = true
 wait_time = 3.0
 one_shot = true
 
+[node name="SpawnPowerUpTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+
 [node name="Scoreboard" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 visible = false
@@ -92,3 +95,4 @@ align = 2
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="TransitionTimer" to="." method="_quit_to_lobby"]
+[connection signal="timeout" from="SpawnPowerUpTimer" to="." method="_on_spawn_powerup_timer_timeout"]

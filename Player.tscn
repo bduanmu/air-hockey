@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://Circle.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Circle.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/ShotIndicator.png" type="Texture" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 resource_local_to_scene = true
@@ -88,6 +89,13 @@ limit_bottom = 1440
 limit_smoothed = true
 smoothing_enabled = true
 smoothing_speed = 1.0
+
+[node name="ShotIndicator" type="Sprite" parent="."]
+unique_name_in_owner = true
+visible = false
+modulate = Color( 0.207843, 0.501961, 0.964706, 0.509804 )
+texture = ExtResource( 3 )
+offset = Vector2( 250, 0 )
 
 [node name="Sprite" type="Node2D" parent="."]
 unique_name_in_owner = true

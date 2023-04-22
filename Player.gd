@@ -26,13 +26,20 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if !is_local:
 		return
-	if event.is_action_pressed("use_powerup"):
+	if event.is_action_released("use_powerup"):
 		var msg := Protobuf.create_client_powerup_used_msg(local_id)
 		Client.send_data_to_server(msg, Online.Send.RELIABLE)
 	elif event.is_action_released("shoot"):
 		var msg := Protobuf.create_client_shot_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
 		Client.send_data_to_server(msg, Online.Send.RELIABLE)
 		start_shot_cooldown()
+		$"%ShotIndicator".hide()
+	elif event.is_action_pressed("shoot"):
+		$"%ShotIndicator".show()
+
+
+func _process(delta) -> void:
+	$"%ShotIndicator".look_at(get_global_mouse_position())
 
 
 func _physics_process(delta: float) -> void:
@@ -83,12 +90,13 @@ func is_shot_on_cooldown() -> bool:
 func start_shot_cooldown() -> void:
 	if !is_shot_on_cooldown():
 		$"%ShotTimer".start()
-		#shot is unavailable
+		$"%ShotIndicator".modulate = Color("827c7c7c")
+		# Shot is unavailable
 
 
 func _on_shot_timer_timeout() -> void:
-	pass
-	#shot is available
+	# Shot is available
+	$"%ShotIndicator".modulate = Color("823580f6")
 
 
 func recoil(direction: Vector2) -> void:

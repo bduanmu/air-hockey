@@ -135,6 +135,8 @@ func spawn_powerup(powerup: PowerUp, index: int) -> void:
 
 
 func _on_spawn_powerup_timer_timeout():
+	if !Client.i_am_server():
+		return
 	for i in range(current_powerups.size()):
 		if current_powerups[i] == -1:
 			var random_powerup = rng.randi_range(0, PowerUp.Type.COUNT - 1)

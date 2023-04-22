@@ -1,9 +1,9 @@
 [gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Ball.gd" type="Script" id=1]
-[ext_resource path="res://BadCircle.png" type="Texture" id=2]
-[ext_resource path="res://Circle.png" type="Texture" id=3]
-[ext_resource path="res://HollowCircle.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/BadCircle.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Circle.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/HollowCircle.png" type="Texture" id=4]
 
 [sub_resource type="PhysicsMaterial" id=2]
 bounce = 1.0

@@ -118,7 +118,7 @@ _global_script_class_icons={
 
 config/name="Air Hockey"
 run/main_scene="res://Screens/ScreenManager.tscn"
-config/icon="res://icon.png"
+config/icon="res://Sprites/icon.png"
 
 [audio]
 

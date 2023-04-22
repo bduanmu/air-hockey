@@ -17,7 +17,7 @@ var time_remaining: int
 var is_overtime: bool
 var local_id: int
 
-#current_powerups holds the PowerUp.Type. A value of -1 means the power up is used
+#current_powerups holds the PowerUp.Type. A value of -1 means the power up is collected
 var current_powerups: Array = []
 
 
@@ -44,6 +44,8 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		Server.connect("powerup_used_msg_received", self, "_on_powerup_used_msg_received")
 	if !Client.is_connected("powerup_used_msg_received", self, "_on_powerup_used_msg_received"):
 		Client.connect("powerup_used_msg_received", self, "_on_powerup_used_msg_received")
+	if !Client.is_connected("powerup_spawned_msg_received", self, "_on_powerup_spawned_msg_received"):
+		Client.connect("powerup_spawned_msg_received", self, "_on_powerup_spawned_msg_received")
 	
 	# Initialize the map
 	map = lobby_data["map"]
@@ -51,8 +53,6 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	map.connect("goal_scored", self, "on_goal_scored")
 	
 	# Initialize players
-#	for player in players:
-#		players[player].queue_free()
 	players = {}
 	
 	$"%Scoreboard".show()
@@ -70,11 +70,8 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	reset()
 	
 	current_powerups.resize(map.get_node("%PowerUpLocations").get_child_count())
-	
-	spawn_powerup(preload("res://PowerUps/SpeedPowerUp.tscn").instance(), 0)
-	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 1)
-	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 3)
-	spawn_powerup(preload("res://PowerUps/SizePowerUp.tscn").instance(), 2)
+	for i in range(current_powerups.size()):
+		current_powerups[i] = -1
 
 
 func reset() -> void:
@@ -139,16 +136,20 @@ func spawn_powerup(powerup: PowerUp, index: int) -> void:
 
 func _on_spawn_powerup_timer_timeout():
 	for i in range(current_powerups.size()):
-		if !current_powerups[i] == -1:
+		if current_powerups[i] == -1:
 			var random_powerup = rng.randi_range(0, PowerUp.Type.COUNT - 1)
 			while current_powerups.has(random_powerup):
 				random_powerup = (random_powerup + 1) % PowerUp.Type.COUNT
-			#todo: create a signal to spawn power up at the index i
+			current_powerups[i] = random_powerup
+			var msg := Protobuf.create_server_powerup_spawned_msg(random_powerup, i)
+			Server.send_data_to_all_clients(msg, Online.Send.RELIABLE)
 
 
 func _on_powerup_collected(collector: Player, id: int) -> void:
 	var msg := Protobuf.create_server_powerup_collected_msg(collector.local_id, id)
 	Server.send_data_to_all_clients(msg, Online.Send.RELIABLE)
+	# When collected, set the powerup to be -1. 
+	current_powerups[id] = -1
 
 
 func on_goal_scored(side: int) -> void:
@@ -228,9 +229,11 @@ func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
 		if !players[msg["player_id"]].can_move:
 			return
 		if players[msg["player_id"]].powerup != null and players[msg["player_id"]].powerup.is_valid:
-			#When the power up is used, set this power up to be -1 to indicate power up has been used.
-			current_powerups[players[msg["player_id"]].powerup.index] = -1 
 			players[msg["player_id"]].powerup.is_valid = false
 			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"]), Online.Send.RELIABLE)
 	else:
 		players[msg["player_id"]].use_powerup()
+
+
+func _on_powerup_spawned_msg_received(msg: Dictionary) -> void:
+	spawn_powerup(Global.power_ups[msg["powerup_type"]].instance(), msg["powerup_index"])

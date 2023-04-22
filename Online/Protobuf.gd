@@ -10,6 +10,7 @@ const SIZE_OF_POSITION := 12 # 4096
 const SIZE_OF_DIRECTION := 4 # up, down, left, right
 const SIZE_OF_VELOCITY := 12
 const SIZE_OF_POWERUP_ID := 2
+const SIZE_OF_POWERUP_INDEX := 2
 ################################################################################
 
 
@@ -31,6 +32,7 @@ enum Server {
 	BALL_UPDATE,
 	POWERUP_COLLECTED,
 	POWERUP_USED,
+	POWERUP_SPAWNED,
 	SHOT,
 	############################################################################
 }
@@ -164,6 +166,18 @@ static func create_server_powerup_used_msg(player_id: int) -> PoolByteArray:
 	return to_bytes(data)
 
 
+static func create_server_powerup_spawned_msg(powerup_type: int, powerup_index: int) -> PoolByteArray:
+	var data := powerup_index
+	
+	data <<= SIZE_OF_POWERUP_ID
+	data |= powerup_type
+	
+	data <<= SIZE_OF_MSG_TYPE
+	data |= Server.POWERUP_SPAWNED
+	
+	return to_bytes(data)
+
+
 ################################################################################
 
 
@@ -236,9 +250,19 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 	elif msg_type == Client.POWERUP_USED:
 		message["player_id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
 		data >>= SIZE_OF_PLAYER_ID
+	
 	elif msg_type == Server.POWERUP_USED:
 		message["player_id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
 		data >>= SIZE_OF_PLAYER_ID
+	
+	elif msg_type == Server.POWERUP_SPAWNED:
+		message["powerup_type"] = data & (1 << SIZE_OF_POWERUP_ID) - 1
+		data >>= SIZE_OF_POWERUP_ID
+		
+		message["powerup_index"] = data & (1 << SIZE_OF_POWERUP_INDEX) - 1
+		data >>= SIZE_OF_POWERUP_INDEX
+	
+	
 	############################################################################
 	
 	return message

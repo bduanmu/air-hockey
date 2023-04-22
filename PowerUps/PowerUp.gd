@@ -4,6 +4,8 @@ class_name PowerUp extends Area2D
 enum Type {
 	SIZE, 
 	SPEED,
+	TEMP1,
+	TEMP2,
 	
 	#COUNT is the amount of power ups
 	COUNT,

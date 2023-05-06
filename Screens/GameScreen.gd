@@ -16,7 +16,7 @@ var rng: RandomNumberGenerator
 var time_remaining: int
 var is_overtime: bool
 var local_id: int
-
+var objects: Dictionary
 #current_powerups holds the PowerUp.Type. A value of -1 means the power up is collected
 var current_powerups: Array = []
 
@@ -46,6 +46,8 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 		Client.connect("powerup_used_msg_received", self, "_on_powerup_used_msg_received")
 	if !Client.is_connected("powerup_spawned_msg_received", self, "_on_powerup_spawned_msg_received"):
 		Client.connect("powerup_spawned_msg_received", self, "_on_powerup_spawned_msg_received")
+	if !Client.is_connected("wall_destroyed_msg_received", self, "_on_wall_destroyed_msg_received"):
+		Client.connect("wall_destroyed_msg_received", self, "_on_wall_destroyed_msg_received")
 	
 	# Initialize the map
 	map = lobby_data["map"]
@@ -137,6 +139,7 @@ func spawn_powerup(powerup: PowerUp, index: int) -> void:
 
 func spawn_object(node: Node2D, position: Vector2) -> void:
 	node.position = position
+	objects[objects.size()] = node # Todo: walls need to keep track of its id in the objects array instead of the player id
 	map.add_child(node)
 
 
@@ -246,3 +249,7 @@ func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
 
 func _on_powerup_spawned_msg_received(msg: Dictionary) -> void:
 	spawn_powerup(Global.power_ups[msg["powerup_type"]].instance(), msg["powerup_index"])
+
+
+func _on_wall_destroyed_msg_received(msg: Dictionary) -> void:
+	pass

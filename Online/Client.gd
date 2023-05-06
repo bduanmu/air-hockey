@@ -9,6 +9,7 @@ signal powerup_collected_msg_received
 signal powerup_used_msg_received
 signal powerup_spawned_msg_received
 signal shot_msg_received
+signal wall_destroyed_msg_received
 ################################################################################
 
 
@@ -86,6 +87,8 @@ func handle_custom_message(online_id: int, msg: Dictionary) -> void:
 		emit_signal("powerup_spawned_msg_received", msg)
 	elif msg["type"] == Protobuf.Server.SHOT:
 		emit_signal("shot_msg_received", msg)
+	elif msg["type"] == Protobuf.Server.WALL_DESTROYED:
+		emit_signal("wall_destroyed_msg_received", msg)
 	
 
 

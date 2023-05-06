@@ -21,6 +21,7 @@ func use(player, mouse_position: Vector2) -> void:
 	# Technically, the server should do this.
 	mouse_position = player.position + (mouse_position - player.position).limit_length(max_distance)
 	wall = wall_scene.instance()
+	wall.player_id = player.local_id
 	emit_signal("spawn_wall", wall, mouse_position)
 
 

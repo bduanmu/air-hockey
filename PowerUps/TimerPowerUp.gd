@@ -9,7 +9,7 @@ func _ready():
 	pass # Replace with function body.
 
 
-func use(player) -> void:
+func use(player, mouse_position: Vector2) -> void:
 	var timer: Timer = Timer.new()
 	timer.one_shot = true
 	timer.autostart = true

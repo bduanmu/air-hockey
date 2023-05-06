@@ -130,8 +130,14 @@ func shoot(msg: Dictionary) -> void:
 func spawn_powerup(powerup: PowerUp, index: int) -> void:
 	powerup.index = index
 	map.spawn_powerup(powerup, index)
+	powerup.connect_signals(self)
 	if Client.i_am_server():
 		powerup.connect("collected", self, "_on_powerup_collected", [index])
+
+
+func spawn_object(node: Node2D, position: Vector2) -> void:
+	node.position = position
+	map.add_child(node)
 
 
 func _on_spawn_powerup_timer_timeout():
@@ -196,6 +202,7 @@ func _quit_to_lobby() -> void:
 	get_tree().paused = false
 	get_parent().transition(Screens.LOBBY)
 
+
 func _on_player_input_msg_received(msg: Dictionary) -> void:
 	if is_instance_valid(players[msg["id"]]):
 		if !players[msg["id"]].can_move:
@@ -232,9 +239,9 @@ func _on_powerup_used_msg_received(msg: Dictionary, is_server: bool) -> void:
 			return
 		if players[msg["player_id"]].powerup != null and players[msg["player_id"]].powerup.is_valid:
 			players[msg["player_id"]].powerup.is_valid = false
-			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"]), Online.Send.RELIABLE)
+			Server.send_data_to_all_clients(Protobuf.create_server_powerup_used_msg(msg["player_id"], msg["mouse_x"], msg["mouse_y"]), Online.Send.RELIABLE)
 	else:
-		players[msg["player_id"]].use_powerup()
+		players[msg["player_id"]].use_powerup(Vector2(msg["mouse_x"], msg["mouse_y"]))
 
 
 func _on_powerup_spawned_msg_received(msg: Dictionary) -> void:

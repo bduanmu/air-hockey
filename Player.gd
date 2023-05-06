@@ -27,7 +27,7 @@ func _input(event: InputEvent) -> void:
 	if !is_local:
 		return
 	if event.is_action_released("use_powerup"):
-		var msg := Protobuf.create_client_powerup_used_msg(local_id)
+		var msg := Protobuf.create_client_powerup_used_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
 		Client.send_data_to_server(msg, Online.Send.RELIABLE)
 	elif event.is_action_released("shoot"):
 		var msg := Protobuf.create_client_shot_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
@@ -103,8 +103,8 @@ func recoil(direction: Vector2) -> void:
 	velocity += direction * recoil_strength
 
 
-func use_powerup() -> void: #Validation complete
-	powerup.use(self)
+func use_powerup(mouse_position: Vector2) -> void: #Validation complete
+	powerup.use(self, mouse_position)
 	powerup = null
 
 

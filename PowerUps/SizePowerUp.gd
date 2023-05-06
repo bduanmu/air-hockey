@@ -9,8 +9,8 @@ func _ready():
 	add_child(tween)
 
 
-func use(player) -> void:
-	.use(player)
+func use(player, mouse_position: Vector2) -> void:
+	.use(player, mouse_position)
 	var shape: Shape2D = player.get_node("%CollisionShape2D").shape
 	tween.interpolate_property(shape, "radius", shape.radius, shape.radius * 2, 0.2)
 	tween.interpolate_property(player.get_node("%Sprite"), "scale", player.get_node("%Sprite").scale, player.get_node("%Sprite").scale * 2, 0.2)

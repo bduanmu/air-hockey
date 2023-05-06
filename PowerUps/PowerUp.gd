@@ -4,7 +4,7 @@ class_name PowerUp extends Area2D
 enum Type {
 	SIZE, 
 	SPEED,
-	TEMP1,
+	WALL,
 	TEMP2,
 	
 	#COUNT is the amount of power ups
@@ -37,5 +37,9 @@ func on_collected() -> void:
 	is_valid = true
 
 
-func use(player) -> void:
+func use(player, mouse_position: Vector2) -> void:
 	queue_free()
+
+
+func connect_signals(listener: Node) -> void:
+	pass

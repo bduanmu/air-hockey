@@ -11,8 +11,8 @@ func _ready():
 	pass # Replace with function body.
 
 
-func use(player) -> void:
-	.use(player)
+func use(player, mouse_position: Vector2) -> void:
+	.use(player, mouse_position)
 	player.max_speed += 200
 	player.accel_strength += 50
 

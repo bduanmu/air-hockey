@@ -34,6 +34,7 @@ enum Server {
 	POWERUP_USED,
 	POWERUP_SPAWNED,
 	SHOT,
+	WALL_DESTROYED,
 	############################################################################
 }
 
@@ -148,8 +149,14 @@ static func create_server_powerup_collected_msg(collector: int, id: int) -> Pool
 	return to_bytes(data)
 
 
-static func create_client_powerup_used_msg(player_id: int) -> PoolByteArray:
-	var data := player_id
+static func create_client_powerup_used_msg(player_id: int, mouse_x: int = 0, mouse_y: int = 0) -> PoolByteArray:
+	var data := mouse_y
+	
+	data <<= SIZE_OF_POSITION
+	data |= mouse_x
+	
+	data <<= SIZE_OF_PLAYER_ID
+	data |= player_id
 	
 	data <<= SIZE_OF_MSG_TYPE
 	data |= Client.POWERUP_USED
@@ -157,8 +164,14 @@ static func create_client_powerup_used_msg(player_id: int) -> PoolByteArray:
 	return to_bytes(data)
 
 
-static func create_server_powerup_used_msg(player_id: int) -> PoolByteArray:
-	var data := player_id
+static func create_server_powerup_used_msg(player_id: int, mouse_x: int = 0, mouse_y: int = 0) -> PoolByteArray:
+	var data := mouse_y
+	
+	data <<= SIZE_OF_POSITION
+	data |= mouse_x
+	
+	data <<= SIZE_OF_PLAYER_ID
+	data |= player_id
 	
 	data <<= SIZE_OF_MSG_TYPE
 	data |= Server.POWERUP_USED
@@ -174,6 +187,15 @@ static func create_server_powerup_spawned_msg(powerup_type: int, powerup_index: 
 	
 	data <<= SIZE_OF_MSG_TYPE
 	data |= Server.POWERUP_SPAWNED
+	
+	return to_bytes(data)
+
+
+static func create_server_destroy_wall_msg(player_id: int) -> PoolByteArray: 
+	var data := player_id
+	
+	data <<= SIZE_OF_MSG_TYPE
+	data |= Server.WALL_DESTROYED
 	
 	return to_bytes(data)
 
@@ -247,13 +269,15 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		message["id"] = data & (1 << SIZE_OF_POWERUP_ID) - 1
 		data >>= SIZE_OF_POWERUP_ID
 	
-	elif msg_type == Client.POWERUP_USED:
+	elif msg_type == Client.POWERUP_USED or msg_type == Server.POWERUP_USED:
 		message["player_id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
 		data >>= SIZE_OF_PLAYER_ID
-	
-	elif msg_type == Server.POWERUP_USED:
-		message["player_id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
-		data >>= SIZE_OF_PLAYER_ID
+		
+		message["mouse_x"] = data & (1 << SIZE_OF_POSITION) - 1
+		data >>= SIZE_OF_POSITION
+		
+		message["mouse_y"] = data & (1 << SIZE_OF_POSITION) - 1
+		data >>= SIZE_OF_POSITION
 	
 	elif msg_type == Server.POWERUP_SPAWNED:
 		message["powerup_type"] = data & (1 << SIZE_OF_POWERUP_ID) - 1
@@ -261,6 +285,10 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		
 		message["powerup_index"] = data & (1 << SIZE_OF_POWERUP_INDEX) - 1
 		data >>= SIZE_OF_POWERUP_INDEX
+	
+	elif msg_type == Server.WALL_DESTROYED:
+		message["player_id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
+		data >>= SIZE_OF_PLAYER_ID
 	
 	
 	############################################################################

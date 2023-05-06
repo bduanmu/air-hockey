@@ -12,7 +12,7 @@ enum Layer {
 var power_ups: Array = [
 	preload("res://PowerUps/SizePowerUp.tscn"),
 	preload("res://PowerUps/SpeedPowerUp.tscn"),
-	preload("res://PowerUps/SizePowerUp.tscn"),
+	preload("res://PowerUps/WallPowerUp.tscn"),
 	preload("res://PowerUps/SpeedPowerUp.tscn"),
 ]
 

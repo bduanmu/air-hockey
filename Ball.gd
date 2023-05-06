@@ -57,3 +57,6 @@ func _on_body_entered(body: Node) -> void:
 #	if body is KinematicBody2D:
 #		velocity = body.direction
 	$Sprite.modulate = Color.white * min(1.3, 1)
+	
+	if body is WallFromPowerUp and Client.i_am_server():
+		pass

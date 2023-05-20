@@ -59,5 +59,5 @@ func _on_body_entered(body: Node) -> void:
 	$Sprite.modulate = Color.white * min(1.3, 1)
 	
 	if body is WallFromPowerUp and Client.i_am_server():
-		var msg = Protobuf.create_server_destroy_wall_msg(body.player_id)
+		var msg = Protobuf.create_server_destroy_wall_msg(body.id)
 		Server.send_data_to_all_clients(msg, Online.Send.RELIABLE)

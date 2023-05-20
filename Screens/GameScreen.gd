@@ -69,6 +69,7 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	scores = [0, 0]
 	
 	is_overtime = false
+	objects = {}
 	reset()
 	
 	current_powerups.resize(map.get_node("%PowerUpLocations").get_child_count())
@@ -139,7 +140,8 @@ func spawn_powerup(powerup: PowerUp, index: int) -> void:
 
 func spawn_object(node: Node2D, position: Vector2) -> void:
 	node.position = position
-	objects[objects.size()] = node # Todo: walls need to keep track of its id in the objects array instead of the player id
+	node.id = objects.size()
+	objects[objects.size()] = node
 	map.add_child(node)
 
 
@@ -252,4 +254,4 @@ func _on_powerup_spawned_msg_received(msg: Dictionary) -> void:
 
 
 func _on_wall_destroyed_msg_received(msg: Dictionary) -> void:
-	pass
+	objects[msg["id"]].queue_free()

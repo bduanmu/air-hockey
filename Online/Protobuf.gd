@@ -11,6 +11,7 @@ const SIZE_OF_DIRECTION := 4 # up, down, left, right
 const SIZE_OF_VELOCITY := 12
 const SIZE_OF_POWERUP_ID := 2
 const SIZE_OF_POWERUP_INDEX := 2
+const SIZE_OF_OBJECTS_ID := 16 # Maximum ~65000 objects during a game
 ################################################################################
 
 
@@ -191,8 +192,8 @@ static func create_server_powerup_spawned_msg(powerup_type: int, powerup_index: 
 	return to_bytes(data)
 
 
-static func create_server_destroy_wall_msg(player_id: int) -> PoolByteArray: 
-	var data := player_id
+static func create_server_destroy_wall_msg(id: int) -> PoolByteArray: 
+	var data := id
 	
 	data <<= SIZE_OF_MSG_TYPE
 	data |= Server.WALL_DESTROYED
@@ -287,8 +288,8 @@ static func deserialize(bytes: PoolByteArray) -> Dictionary:
 		data >>= SIZE_OF_POWERUP_INDEX
 	
 	elif msg_type == Server.WALL_DESTROYED:
-		message["player_id"] = data & (1 << SIZE_OF_PLAYER_ID) - 1
-		data >>= SIZE_OF_PLAYER_ID
+		message["id"] = data & (1 << SIZE_OF_OBJECTS_ID) - 1
+		data >>= SIZE_OF_OBJECTS_ID
 	
 	
 	############################################################################

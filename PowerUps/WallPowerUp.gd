@@ -21,12 +21,13 @@ func use(player, mouse_position: Vector2) -> void:
 	# Technically, the server should do this.
 	mouse_position = player.position + (mouse_position - player.position).limit_length(max_distance)
 	wall = wall_scene.instance()
-	wall.player_id = player.local_id
 	emit_signal("spawn_wall", wall, mouse_position)
 
 
 func on_timeout(player) -> void:
-	wall.queue_free()
+	.on_timeout(player)
+	if is_instance_valid(wall): 
+		wall.queue_free()
 
 
 func connect_signals(listener: Node) -> void:

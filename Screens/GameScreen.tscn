@@ -30,15 +30,16 @@ projectile_scene = ExtResource( 3 )
 environment = SubResource( 1 )
 
 [node name="Timer" type="Timer" parent="."]
+pause_mode = 1
 unique_name_in_owner = true
 
 [node name="TransitionTimer" type="Timer" parent="."]
-pause_mode = 2
 unique_name_in_owner = true
 wait_time = 3.0
 one_shot = true
 
 [node name="SpawnPowerUpTimer" type="Timer" parent="."]
+pause_mode = 1
 unique_name_in_owner = true
 
 [node name="Scoreboard" type="CanvasLayer" parent="."]

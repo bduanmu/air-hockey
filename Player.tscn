@@ -76,11 +76,13 @@ tracks/1/keys = {
 }
 
 [node name="Player" type="KinematicBody2D"]
+pause_mode = 1
 collision_mask = 7
 script = ExtResource( 1 )
 accel_strength = 200
 
 [node name="Camera2D" type="Camera2D" parent="."]
+pause_mode = 2
 current = true
 limit_left = 0
 limit_top = 0

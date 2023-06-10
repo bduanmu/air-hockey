@@ -21,7 +21,13 @@ var objects: Dictionary
 var current_powerups: Array = []
 
 
+func _ready() -> void:
+	pause_mode = Node.PAUSE_MODE_PROCESS
+
+
 func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_seed: int) -> void:
+	get_tree().set_pause(true)
+	
 	self.lobby_data = lobby_data
 	
 	rng = RandomNumberGenerator.new()
@@ -106,6 +112,7 @@ func reset() -> void:
 		players[players.keys()[1]].can_move = false
 	
 	yield(get_tree().create_timer(3), "timeout")
+	get_tree().set_pause(false)
 	$"%Timer".set_paused(false)
 	$"%SpawnPowerUpTimer".set_paused(false)
 	
@@ -174,6 +181,7 @@ func on_goal_scored(side: int) -> void:
 		$"%RightScore".text = str(scores[1])
 	else: 
 		$"%LeftScore".text = str(scores[0])
+	get_tree().set_pause(true)
 	$"%Timer".set_paused(true)
 	$"%SpawnPowerUpTimer".set_paused(true)
 	if is_overtime:

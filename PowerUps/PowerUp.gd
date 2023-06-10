@@ -16,14 +16,14 @@ signal collected
 
 
 export(Type) var type: int
+export(Texture) var indicator_texture: Texture
 
 var is_valid: bool
 var index: int
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
 
 
 func _on_body_entered(body):
@@ -39,6 +39,10 @@ func on_collected() -> void:
 
 func use(player, mouse_position: Vector2) -> void:
 	queue_free()
+
+
+func update_indicator(player) -> void:
+	pass
 
 
 func connect_signals(listener: Node) -> void:

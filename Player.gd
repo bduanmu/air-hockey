@@ -10,6 +10,7 @@ var can_move: bool = false
 var last_server_time: int
 var velocity: Vector2
 var powerup: PowerUp
+var powerup_indicator: Sprite
 
 
 # Called when the node enters the scene tree for the first time.
@@ -21,14 +22,23 @@ func _ready() -> void:
 		$"%InnerCircle".modulate = Color.blue * 1.3
 	last_server_time = OS.get_system_time_msecs()
 	$"%ShotTimer".connect("timeout", self, "_on_shot_timer_timeout")
+	
+	powerup_indicator = Sprite.new()
+	add_child(powerup_indicator)
+	powerup_indicator.hide()
 
 
 func _input(event: InputEvent) -> void:
 	if !is_local:
 		return
 	if event.is_action_released("use_powerup"):
+		if is_instance_valid(powerup):
+			powerup_indicator.hide()
 		var msg := Protobuf.create_client_powerup_used_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
 		Client.send_data_to_server(msg, Online.Send.RELIABLE)
+	elif event.is_action_pressed("use_powerup"):
+		if is_instance_valid(powerup):
+			powerup_indicator.show()
 	elif event.is_action_released("shoot"):
 		var msg := Protobuf.create_client_shot_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
 		Client.send_data_to_server(msg, Online.Send.RELIABLE)
@@ -40,6 +50,8 @@ func _input(event: InputEvent) -> void:
 
 func _process(delta) -> void:
 	$"%ShotIndicator".look_at(get_global_mouse_position())
+	if is_instance_valid(powerup):
+		powerup.update_indicator(self)
 
 
 func _physics_process(delta: float) -> void:

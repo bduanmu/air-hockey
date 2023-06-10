@@ -19,6 +19,7 @@ func _ready() -> void:
 	Online.connect("lobby_entered", self, "_on_lobby_entered")
 	current_screen = $StartScreen
 	current_screen.connect_signals(self)
+	randomize()
 
 
 func transition(next_screen_index: int) -> void:

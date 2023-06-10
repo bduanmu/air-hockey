@@ -64,6 +64,9 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	$"%Timer".set_paused(true)
 	time_remaining = 5 * 60 * 0 + 20
 	
+	$"%SpawnPowerUpTimer".start(min(5, rng.randfn(15, 5)))
+	$"%SpawnPowerUpTimer".set_paused(true)
+	
 	$"%LeftScore".text = "0"
 	$"%RightScore".text = "0"
 	scores = [0, 0]
@@ -104,6 +107,8 @@ func reset() -> void:
 	
 	yield(get_tree().create_timer(3), "timeout")
 	$"%Timer".set_paused(false)
+	$"%SpawnPowerUpTimer".set_paused(false)
+	
 	
 	players[players.keys()[0]].can_move = true
 	players[players.keys()[0]].last_server_time = OS.get_system_time_msecs()
@@ -114,8 +119,6 @@ func reset() -> void:
 	ball = preload("res://Ball.tscn").instance()
 	ball.position = Vector2(2560 / 2, 820)
 	map.add_child(ball)
-	
-	$"%SpawnPowerUpTimer".start(max(5, rng.randfn(15, 5)))
 
 
 func shoot(msg: Dictionary) -> void:
@@ -172,6 +175,7 @@ func on_goal_scored(side: int) -> void:
 	else: 
 		$"%LeftScore".text = str(scores[0])
 	$"%Timer".set_paused(true)
+	$"%SpawnPowerUpTimer".set_paused(true)
 	if is_overtime:
 		declare_winner()
 	else:

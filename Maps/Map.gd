@@ -26,5 +26,6 @@ func spawn_powerup(powerup: PowerUp, id: int) -> void:
 
 func on_powerup_collected(player: Player, id: int) -> void:
 	player.powerup = powerups[id]
+	player.powerup_indicator.texture = powerups[id].indicator_texture
 	powerups[id].on_collected()
 	powerups[id] = null

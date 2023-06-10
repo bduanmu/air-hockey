@@ -1,11 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://PowerUps/WallPowerUp.gd" type="Script" id=1]
 [ext_resource path="res://PowerUps/WallFromPowerUp.tscn" type="PackedScene" id=2]
 [ext_resource path="res://PowerUps/PowerUp.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Sprites/Circle.png" type="Texture" id=4]
 
 [node name="Area2D" instance=ExtResource( 3 )]
 script = ExtResource( 1 )
+indicator_texture = ExtResource( 4 )
 duration = 15
 wall_scene = ExtResource( 2 )
 max_distance = 750

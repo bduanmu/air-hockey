@@ -30,5 +30,10 @@ func on_timeout(player) -> void:
 		wall.queue_free()
 
 
+func update_indicator(player) -> void:
+	.update_indicator(player)
+	player.powerup_indicator.global_position = player.position + (get_global_mouse_position() - player.position).limit_length(max_distance)
+
+
 func connect_signals(listener: Node) -> void:
 	connect("spawn_wall", listener, "spawn_object")

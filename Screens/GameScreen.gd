@@ -68,7 +68,7 @@ func create_new_game(lobby_data: Dictionary, lobby_id: int, host_id: int, lobby_
 	$"%OvertimeLabel".modulate = Color.transparent
 	$"%Timer".start()
 	$"%Timer".set_paused(true)
-	time_remaining = 5 * 60 * 0 + 20
+	time_remaining = 5 * 60 #* 0 + 20
 	
 	$"%SpawnPowerUpTimer".start(min(5, rng.randfn(15, 5)))
 	$"%SpawnPowerUpTimer".set_paused(true)
@@ -137,6 +137,7 @@ func shoot(msg: Dictionary) -> void:
 	var projectile: Projectile = projectile_scene.instance()
 	projectile.position = players[msg["id"]].position
 	projectile.linear_velocity = direction * projectile.speed
+	projectile.rotate(direction.angle())
 	add_child(projectile)
 
 

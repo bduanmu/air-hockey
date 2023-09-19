@@ -8,7 +8,7 @@
 [sub_resource type="PhysicsMaterial" id=2]
 bounce = 1.0
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="CircleShape2D" id=13]
 radius = 35.0
 
 [sub_resource type="Curve" id=3]
@@ -68,7 +68,7 @@ script = ExtResource( 1 )
 max_speed = 1750
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource( 13 )
 
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 1.13, 1.13, 1.13, 1 )

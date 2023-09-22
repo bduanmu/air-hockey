@@ -172,6 +172,9 @@ func _on_spawn_powerup_timer_timeout():
 func _on_powerup_collected(collector: Player, id: int) -> void:
 	var msg := Protobuf.create_server_powerup_collected_msg(collector.local_id, id)
 	Server.send_data_to_all_clients(msg, Online.Send.RELIABLE)
+	
+	$"Scoreboard/PowerUpIndicator".texture = Global.power_up_textures[current_powerups[id]]
+	
 	# When collected, set the powerup to be -1. 
 	current_powerups[id] = -1
 

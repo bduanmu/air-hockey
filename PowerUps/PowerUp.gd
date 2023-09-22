@@ -17,7 +17,6 @@ signal collected
 
 export(Type) var type: int
 export(Texture) var indicator_texture: Texture
-export(Texture) var powerup_texture: Texture
 
 var is_valid: bool
 var index: int
@@ -25,7 +24,7 @@ var index: int
 
 func _ready():
 	var sprite := Sprite.new()
-	sprite.texture = powerup_texture
+	sprite.texture = Global.power_up_textures[type]
 	sprite.scale = Vector2(1, 1) * ($CollisionShape2D.shape.radius * 2) / 256
 	add_child(sprite)
 

@@ -96,10 +96,7 @@ align = 2
 
 [node name="PowerUpIndicator" type="TextureRect" parent="Scoreboard"]
 unique_name_in_owner = true
-margin_left = 100.0
-margin_top = 100.0
-margin_right = 164.0
-margin_bottom = 164.0
+rect_scale = Vector2( 0.7, 0.7 )
 texture = ExtResource( 4 )
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

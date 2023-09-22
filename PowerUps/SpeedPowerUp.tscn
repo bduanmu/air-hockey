@@ -5,4 +5,5 @@
 
 [node name="Area2D" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
+type = 1
 duration = 5

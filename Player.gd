@@ -34,6 +34,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_released("use_powerup"):
 		if is_instance_valid(powerup):
 			powerup_indicator.hide()
+			
 		var msg := Protobuf.create_client_powerup_used_msg(local_id, get_global_mouse_position().x, get_global_mouse_position().y)
 		Client.send_data_to_server(msg, Online.Send.RELIABLE)
 	elif event.is_action_pressed("use_powerup"):

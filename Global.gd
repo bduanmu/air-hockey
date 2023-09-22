@@ -16,6 +16,13 @@ var power_ups: Array = [
 	preload("res://PowerUps/SpeedPowerUp.tscn"),
 ]
 
+var power_up_textures: Array = [
+	preload("res://Sprites/SizePowerUpTexture.png"),
+	preload("res://Sprites/SpeedPowerUpTexture.png"),
+	preload("res://Sprites/SizePowerUpTexture.png"),
+	preload("res://Sprites/SpeedPowerUpTexture.png"),
+]
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

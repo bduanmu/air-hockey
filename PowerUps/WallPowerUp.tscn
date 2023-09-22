@@ -7,6 +7,7 @@
 
 [node name="Area2D" instance=ExtResource( 3 )]
 script = ExtResource( 1 )
+type = 2
 indicator_texture = ExtResource( 4 )
 duration = 15
 wall_scene = ExtResource( 2 )
